@@ -59,7 +59,11 @@
       "Bash(npx vercel whoami)",
       "Bash(git add vercel.json)",
       "Bash(git commit -m \"$(cat <<''EOF''\n修复Vercel部署配置错误\n\n- 更新vercel.json中的functions配置，将pages/api路径改为server/api\n- 同时支持.js和.ts文件，匹配实际的API文件结构\n- 解决\"The pattern doesn 't match any Serverless Functions\"错误\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
-      "Bash(timeout 10 npm run dev)"
+      "Bash(timeout 10 npm run dev)",
+      "Bash(git commit -m \"$(cat <<''EOF''\n修复头部和底部组件不显示问题\n\n- 使用ClientOnly包装AppHeader和AppFooter组件，避免SSR hydration错误\n- 添加fallback模板确保在SSR时显示基本结构\n- 优化Nuxt配置，添加prerender路由\n- 增强组件的SSR兼容性，添加process.client检查\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(npm run start)",
+      "mcp__playwright__browser_console_messages",
+      "Bash(PORT=3002 npm run start)"
     ],
     "deny": [],
     "ask": []

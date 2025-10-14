@@ -3,7 +3,7 @@
     <nav class="container mx-auto px-6 py-4">
       <div class="flex justify-between items-center">
         <!-- Logo -->
-        <NuxtLink :to="getLocalizedPath('/')" class="flex items-center space-x-2">
+        <NuxtLink to="/" class="flex items-center space-x-2">
           <div class="text-2xl font-bold text-primary-600">
             🛠️ AI Toolbox
           </div>
@@ -11,17 +11,17 @@
 
         <!-- 桌面导航 -->
         <div class="hidden md:flex items-center space-x-8">
-          <NuxtLink :to="getLocalizedPath('/')"
+          <NuxtLink to="/"
                     class="text-gray-700 hover:text-primary-600 transition-colors">
-            {{ $t('nav.home') }}
+            {{ navTexts.home }}
           </NuxtLink>
-          <NuxtLink :to="getLocalizedPath('/tools')"
+          <NuxtLink to="/tools"
                     class="text-gray-700 hover:text-primary-600 transition-colors">
-            {{ $t('nav.tools') }}
+            {{ navTexts.tools }}
           </NuxtLink>
-          <NuxtLink :to="getLocalizedPath('/pricing')"
+          <NuxtLink to="/pricing"
                     class="text-gray-700 hover:text-primary-600 transition-colors">
-            {{ $t('nav.pricing') }}
+            {{ navTexts.pricing }}
           </NuxtLink>
 
           <!-- 语言切换 -->
@@ -59,25 +59,25 @@
       <!-- 移动端菜单 -->
       <div v-if="showMobileMenu" class="md:hidden mt-4 pt-4 border-t border-gray-200">
         <div class="flex flex-col space-y-3">
-          <NuxtLink :to="getLocalizedPath('/')"
+          <NuxtLink to="/"
                     @click="closeMobileMenu"
                     class="text-gray-700 hover:text-primary-600 transition-colors">
-            {{ $t('nav.home') }}
+            {{ navTexts.home }}
           </NuxtLink>
-          <NuxtLink :to="getLocalizedPath('/tools')"
+          <NuxtLink to="/tools"
                     @click="closeMobileMenu"
                     class="text-gray-700 hover:text-primary-600 transition-colors">
-            {{ $t('nav.tools') }}
+            {{ navTexts.tools }}
           </NuxtLink>
-          <NuxtLink :to="getLocalizedPath('/pricing')"
+          <NuxtLink to="/pricing"
                     @click="closeMobileMenu"
                     class="text-gray-700 hover:text-primary-600 transition-colors">
-            {{ $t('nav.pricing') }}
+            {{ navTexts.pricing }}
           </NuxtLink>
 
           <!-- 移动端语言切换 -->
           <div class="pt-3 border-t border-gray-200">
-            <div class="text-sm text-gray-600 mb-2">{{ $t('nav.language') }}:</div>
+            <div class="text-sm text-gray-600 mb-2">语言:</div>
             <div class="flex flex-col space-y-2">
               <div v-for="locale in availableLocales" :key="locale.code"
                    @click="handleLanguageSwitch(locale.code)"
@@ -93,21 +93,49 @@
 </template>
 
 <script setup>
-// 使用统一的国际化路由工具 - 添加SSR保护
-const { getLocalizedPath, switchLanguage, getAvailableLocales, getCurrentLanguageInfo } = useI18nRouting()
-
-// 确保在客户端渲染前不执行可能导致hydration错误的代码
+// 简化的SSR安全版本
 const isClient = process.client
 
 // 响应式数据
 const showMobileMenu = ref(false)
 const showLanguageMenu = ref(false)
 
-// 可用语言
-const availableLocales = computed(() => getAvailableLocales())
+// 静态导航文本 - 避免i18n hydration问题
+const navTexts = computed(() => {
+  // 基本的导航文本，根据当前语言动态设置
+  if (isClient) {
+    const currentPath = window.location.pathname
+    if (currentPath.startsWith('/zh')) {
+      return {
+        home: '首页',
+        tools: '工具',
+        pricing: '定价'
+      }
+    }
+  }
+  return {
+    home: 'Home',
+    tools: 'Tools',
+    pricing: 'Pricing'
+  }
+})
 
-// 当前语言
-const currentLanguage = computed(() => getCurrentLanguageInfo())
+// 可用语言 - 简化版本
+const availableLocales = [
+  { code: 'en', name: 'English' },
+  { code: 'zh', name: '中文' }
+]
+
+// 当前语言 - 简化版本
+const currentLanguage = computed(() => {
+  if (isClient) {
+    const currentPath = window.location.pathname
+    if (currentPath.startsWith('/zh')) {
+      return { code: 'zh', name: '中文' }
+    }
+  }
+  return { code: 'en', name: 'English' }
+})
 
 // 切换移动端菜单
 const toggleMobileMenu = () => {
@@ -127,30 +155,44 @@ const toggleLanguageMenu = () => {
   showLanguageMenu.value = !showLanguageMenu.value
 }
 
-// 处理语言切换
-const handleLanguageSwitch = async (localeCode) => {
-  await switchLanguage(localeCode)
+// 处理语言切换 - 简化版本
+const handleLanguageSwitch = (localeCode) => {
+  if (!isClient) return
+
+  const currentPath = window.location.pathname
+
+  if (localeCode === 'zh') {
+    if (currentPath === '/') {
+      window.location.href = '/zh'
+    } else if (!currentPath.startsWith('/zh')) {
+      window.location.href = '/zh' + currentPath
+    }
+  } else {
+    if (currentPath.startsWith('/zh')) {
+      const pathWithoutZh = currentPath.replace('/zh', '') || '/'
+      window.location.href = pathWithoutZh
+    }
+  }
+
   showLanguageMenu.value = false
   showMobileMenu.value = false
 }
 
 // 点击外部关闭语言菜单 - 只在客户端执行
 onMounted(() => {
-  if (process.client) {
+  if (isClient) {
+    const handleClickOutside = (event) => {
+      const target = event.target
+      if (!target.closest('.relative')) {
+        showLanguageMenu.value = false
+      }
+    }
     document.addEventListener('click', handleClickOutside)
+
+    // 清理函数
+    onUnmounted(() => {
+      document.removeEventListener('click', handleClickOutside)
+    })
   }
 })
-
-onUnmounted(() => {
-  if (process.client) {
-    document.removeEventListener('click', handleClickOutside)
-  }
-})
-
-const handleClickOutside = (event) => {
-  const target = event.target
-  if (!target.closest('.relative')) {
-    showLanguageMenu.value = false
-  }
-}
 </script>
