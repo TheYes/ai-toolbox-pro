@@ -61,18 +61,8 @@
 </template>
 
 <script setup>
-// 获取当前语言和路由
-const { $i18n } = useNuxtApp()
-const route = useRoute()
-
-// 简单的路由函数，直接生成带语言前缀的路径
-const getLocalizedPath = (path) => {
-  const currentLocale = $i18n.locale.value
-  if (path === '/') {
-    return `/${currentLocale}`
-  }
-  return `/${currentLocale}${path}`
-}
+// 使用统一的国际化路由工具
+const { getLocalizedPath } = useI18nRouting()
 
 // SEO设置
 useHead({

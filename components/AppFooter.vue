@@ -17,12 +17,12 @@
           <h3 class="text-lg font-semibold mb-4">{{ $t('footer.quickLinks') }}</h3>
           <ul class="space-y-2">
             <li>
-              <NuxtLink :to="`/${$i18n.locale.value}`" class="text-gray-400 hover:text-white transition-colors">
+              <NuxtLink :to="getLocalizedPath('/')" class="text-gray-400 hover:text-white transition-colors">
                 {{ $t('nav.home') }}
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink :to="`/${$i18n.locale.value}/tools`" class="text-gray-400 hover:text-white transition-colors">
+              <NuxtLink :to="getLocalizedPath('/tools')" class="text-gray-400 hover:text-white transition-colors">
                 {{ $t('nav.tools') }}
               </NuxtLink>
             </li>
@@ -34,17 +34,17 @@
           <h3 class="text-lg font-semibold mb-4">{{ $t('footer.categories') }}</h3>
           <ul class="space-y-2">
             <li>
-              <NuxtLink :to="`/${$i18n.locale.value}/tools?category=text`" class="text-gray-400 hover:text-white transition-colors">
+              <NuxtLink :to="getLocalizedPath('/tools?category=text')" class="text-gray-400 hover:text-white transition-colors">
                 {{ $t('categories.text') }}
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink :to="`/${$i18n.locale.value}/tools?category=developer`" class="text-gray-400 hover:text-white transition-colors">
+              <NuxtLink :to="getLocalizedPath('/tools?category=developer')" class="text-gray-400 hover:text-white transition-colors">
                 {{ $t('categories.developer') }}
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink :to="`/${$i18n.locale.value}/tools?category=utility`" class="text-gray-400 hover:text-white transition-colors">
+              <NuxtLink :to="getLocalizedPath('/tools?category=utility')" class="text-gray-400 hover:text-white transition-colors">
                 {{ $t('categories.utility') }}
               </NuxtLink>
             </li>
@@ -83,5 +83,6 @@
 </template>
 
 <script setup>
-// 无需额外逻辑
+// 使用统一的国际化路由工具
+const { getLocalizedPath } = useI18nRouting()
 </script>

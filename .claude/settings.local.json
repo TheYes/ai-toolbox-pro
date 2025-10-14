@@ -12,7 +12,20 @@
       "Bash(npm run build)",
       "Bash(curl -s \"http://localhost:3001/zh/tools/json-formatter\")",
       "Bash(npx playwright test --project=chromium tests/final-verification.spec.ts)",
-      "Bash(git add .)"
+      "Bash(git add .)",
+      "Bash(git commit -m \"$(cat <<''EOF''\n中文和英文都可以正常显示了，en/、/zh\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(curl -s \"http://localhost:3000/\")",
+      "Bash(curl -s \"http://localhost:3000/zh\")",
+      "Bash(curl -s \"http://localhost:3000/tools\")",
+      "Bash(curl -s \"http://localhost:3000/zh/tools\")",
+      "Bash(curl -s \"http://localhost:3000/tools/json-formatter\")",
+      "Bash(curl -s \"http://localhost:3000/zh/tools/json-formatter\")",
+      "Bash(curl -s \"http://localhost:3001/\")",
+      "Bash(curl -s \"http://localhost:3001/tools\")",
+      "Bash(curl -s \"http://localhost:3001/zh/tools\")",
+      "Bash(curl -s \"http://localhost:3001/tools/json-formatter\")",
+      "Bash(curl -s \"http://localhost:3002/\")",
+      "Bash(curl -s \"http://localhost:3002/zh\")"
     ],
     "deny": [],
     "ask": []

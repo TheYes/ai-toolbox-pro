@@ -34,7 +34,7 @@
             <div v-if="showLanguageMenu"
                  class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
               <div v-for="locale in availableLocales" :key="locale.code"
-                   @click="switchLanguage(locale.code)"
+                   @click="handleLanguageSwitch(locale.code)"
                    class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
                 {{ locale.name }}
               </div>
@@ -71,7 +71,7 @@
             <div class="text-sm text-gray-600 mb-2">{{ $t('nav.language') }}:</div>
             <div class="flex flex-col space-y-2">
               <div v-for="locale in availableLocales" :key="locale.code"
-                   @click="switchLanguage(locale.code)"
+                   @click="handleLanguageSwitch(locale.code)"
                    class="text-gray-700 hover:text-primary-600 cursor-pointer">
                 {{ locale.name }}
               </div>
@@ -84,38 +84,18 @@
 </template>
 
 <script setup>
-const { $i18n } = useNuxtApp()
-const router = useRouter()
-
-// 简单的路由函数
-const getLocalizedPath = (path) => {
-  const currentLocale = $i18n.locale.value
-  if (path === '/') {
-    return `/${currentLocale}`
-  }
-  return `/${currentLocale}${path}`
-}
-
-// 语言切换路径
-const switchLocalePath = (targetLocale) => {
-  const currentPath = router.currentRoute.value.path
-  return currentPath.replace(/^\/[a-z]{2}/, `/${targetLocale}`)
-}
+// 使用统一的国际化路由工具
+const { getLocalizedPath, switchLanguage, getAvailableLocales, getCurrentLanguageInfo } = useI18nRouting()
 
 // 响应式数据
 const showMobileMenu = ref(false)
 const showLanguageMenu = ref(false)
 
 // 可用语言
-const availableLocales = computed(() => [
-  { code: 'en', name: 'English' },
-  { code: 'zh', name: '中文' }
-])
+const availableLocales = computed(() => getAvailableLocales())
 
 // 当前语言
-const currentLanguage = computed(() => {
-  return availableLocales.value.find(locale => locale.code === $i18n.locale.value) || availableLocales.value[0]
-})
+const currentLanguage = computed(() => getCurrentLanguageInfo())
 
 // 切换移动端菜单
 const toggleMobileMenu = () => {
@@ -135,17 +115,9 @@ const toggleLanguageMenu = () => {
   showLanguageMenu.value = !showLanguageMenu.value
 }
 
-// 切换语言
-const switchLanguage = async (localeCode) => {
-  // 保存用户语言偏好到 Cookie
-  if (process.client) {
-    document.cookie = `user_language=${localeCode}; path=/; max-age=31536000` // 保存一年
-  }
-
-  // 切换语言并导航
-  await $i18n.setLocale(localeCode)
-  await router.push(switchLocalePath(localeCode))
-
+// 处理语言切换
+const handleLanguageSwitch = async (localeCode) => {
+  await switchLanguage(localeCode)
   showLanguageMenu.value = false
   showMobileMenu.value = false
 }

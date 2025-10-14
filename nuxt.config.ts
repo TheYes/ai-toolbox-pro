@@ -97,16 +97,16 @@ export default defineNuxtConfig({
         file: 'zh.json'
       }
     ],
-    defaultLocale: 'zh',
+    defaultLocale: 'en',
     langDir: 'locales',
     lazy: true,
-    strategy: 'prefix',
+    strategy: 'prefix_except_default',
     detectBrowserLanguage: {
       useCookie: true,
       cookieKey: 'user_language',
       redirectOn: 'root',
       alwaysRedirect: false,
-      fallbackLocale: 'zh'
+      fallbackLocale: 'en'
     }
   },
 

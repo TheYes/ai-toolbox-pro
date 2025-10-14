@@ -95,18 +95,9 @@
 </template>
 
 <script setup>
-// 导入国际化函数
+// 使用统一的国际化路由工具
+const { getLocalizedPath } = useI18nRouting()
 const { t } = useI18n()
-const { $i18n } = useNuxtApp()
-
-// 简单的路由函数
-const getLocalizedPath = (path) => {
-  const currentLocale = $i18n.locale.value
-  if (path === '/') {
-    return `/${currentLocale}`
-  }
-  return `/${currentLocale}${path}`
-}
 
 // SEO设置
 useHead({

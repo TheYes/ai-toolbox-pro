@@ -1,30 +1,68 @@
 /**
  * 全局路由中间件
- * 确保所有路由都包含正确的语言前缀
+ * 处理英文无前缀，其他语言有前缀的URL结构
  */
 
 export default defineNuxtRouteMiddleware((to, from) => {
-  // 如果已经是有效的语言前缀路径，则直接通过
-  if (hasValidLanguagePrefix(to.path)) {
+  // 默认语言（英文）不需要前缀
+  const defaultLocale = 'en'
+
+  // 检查路径是否已经处理过
+  if (isPathProcessed(to.path)) {
     return
   }
 
   // 获取目标语言
   const targetLocale = getTargetLocale(to.path)
 
-  // 为路径添加语言前缀
-  const localizedPath = `/${targetLocale}${to.path}`
+  // 如果是默认语言且路径没有前缀，直接通过
+  if (targetLocale === defaultLocale && !hasLanguagePrefix(to.path)) {
+    return
+  }
 
-  // 重定向到带语言前缀的路径
-  return navigateTo(localizedPath, { replace: true })
+  // 如果是默认语言但路径有前缀，移除前缀
+  if (targetLocale === defaultLocale && hasLanguagePrefix(to.path)) {
+    const pathWithoutLocale = removeLanguagePrefix(to.path)
+    return navigateTo(pathWithoutLocale || '/', { replace: true })
+  }
+
+  // 如果是非默认语言且没有前缀，添加前缀
+  if (targetLocale !== defaultLocale && !hasLanguagePrefix(to.path)) {
+    const localizedPath = `/${targetLocale}${to.path}`
+    return navigateTo(localizedPath, { replace: true })
+  }
+
+  // 其他情况直接通过
 })
 
 /**
- * 检查路径是否已经有有效的语言前缀
+ * 检查路径是否已经处理过（避免无限重定向）
  */
-const hasValidLanguagePrefix = (path: string): boolean => {
+const isPathProcessed = (path: string): boolean => {
+  // 根路径需要处理
+  if (path === '/') return false
+
+  // 已经有语言前缀的路径认为是已处理的
+  return hasLanguagePrefix(path)
+}
+
+/**
+ * 检查路径是否有语言前缀
+ */
+const hasLanguagePrefix = (path: string): boolean => {
   const validPrefixes = ['/en/', '/zh/', '/en', '/zh']
   return validPrefixes.some(prefix => path === prefix || path.startsWith(prefix))
+}
+
+/**
+ * 移除路径的语言前缀
+ */
+const removeLanguagePrefix = (path: string): string => {
+  const localeMatch = path.match(/^\/([a-z]{2})(\/|$)/)
+  if (localeMatch) {
+    return path.replace(/^\/[a-z]{2}/, '') || '/'
+  }
+  return path
 }
 
 /**
@@ -32,10 +70,10 @@ const hasValidLanguagePrefix = (path: string): boolean => {
  */
 const getTargetLocale = (path: string): string => {
   // 1. 优先从 URL 路径推断
-  if (path.startsWith('/zh') || path.includes('/zh')) {
+  if (path.startsWith('/zh')) {
     return 'zh'
   }
-  if (path.startsWith('/en') || path.includes('/en')) {
+  if (path.startsWith('/en')) {
     return 'en'
   }
 
