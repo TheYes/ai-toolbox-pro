@@ -1,0 +1,15 @@
+2025-10-13T06:32:36.884Z [INFO] ℹ️ 执行一次性健康检查...
+2025-10-13T06:32:36.887Z [INFO] ℹ️ 检查 开发 服务器健康状态 (端口 3000)...
+2025-10-13T06:32:41.922Z [ERROR] ❌ 开发 服务器问题: http://localhost:3000/ - TIMEOUT
+2025-10-13T06:32:46.940Z [ERROR] ❌ 开发 服务器问题: http://localhost:3000/tools - TIMEOUT
+2025-10-13T06:32:51.946Z [ERROR] ❌ 开发 服务器问题: http://localhost:3000/tools/json-formatter - TIMEOUT
+2025-10-13T06:32:56.953Z [ERROR] ❌ 开发 服务器问题: http://localhost:3000/tools/base64 - TIMEOUT
+2025-10-13T06:33:01.965Z [ERROR] ❌ 开发 服务器问题: http://localhost:3000/tools/password-generator - TIMEOUT
+2025-10-13T06:33:06.969Z [ERROR] ❌ 开发 服务器问题: http://localhost:3000/tools/color-picker - TIMEOUT
+2025-10-13T06:33:11.984Z [ERROR] ❌ 开发 服务器问题: http://localhost:3000/tools/url-encoder - TIMEOUT
+2025-10-13T06:33:16.990Z [ERROR] ❌ 开发 服务器问题: http://localhost:3000/tools/qr-code - TIMEOUT
+2025-10-13T06:33:22.008Z [ERROR] ❌ 开发 服务器问题: http://localhost:3000/zh - TIMEOUT
+2025-10-13T06:33:27.022Z [ERROR] ❌ 开发 服务器问题: http://localhost:3000/zh/tools - TIMEOUT
+2025-10-13T06:33:27.024Z [WARNING] ⚠️ 开发 服务器部分异常 (0/10)
+2025-10-13T06:33:27.024Z [INFO] ℹ️ 检查 生产 服务器健康状态 (端口 3001)...
+2025-10-13T06:33:27.072Z [SUCCESS] ✅ 生产 服务器完全正常 (10/10)

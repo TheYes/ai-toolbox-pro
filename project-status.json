@@ -1,0 +1,124 @@
+{
+  "timestamp": "2025-10-13T06:33:27.073Z",
+  "development": {
+    "serverType": "开发",
+    "port": 3000,
+    "total": 10,
+    "working": 0,
+    "results": [
+      {
+        "url": "http://localhost:3000/",
+        "status": "TIMEOUT",
+        "working": false
+      },
+      {
+        "url": "http://localhost:3000/tools",
+        "status": "TIMEOUT",
+        "working": false
+      },
+      {
+        "url": "http://localhost:3000/tools/json-formatter",
+        "status": "TIMEOUT",
+        "working": false
+      },
+      {
+        "url": "http://localhost:3000/tools/base64",
+        "status": "TIMEOUT",
+        "working": false
+      },
+      {
+        "url": "http://localhost:3000/tools/password-generator",
+        "status": "TIMEOUT",
+        "working": false
+      },
+      {
+        "url": "http://localhost:3000/tools/color-picker",
+        "status": "TIMEOUT",
+        "working": false
+      },
+      {
+        "url": "http://localhost:3000/tools/url-encoder",
+        "status": "TIMEOUT",
+        "working": false
+      },
+      {
+        "url": "http://localhost:3000/tools/qr-code",
+        "status": "TIMEOUT",
+        "working": false
+      },
+      {
+        "url": "http://localhost:3000/zh",
+        "status": "TIMEOUT",
+        "working": false
+      },
+      {
+        "url": "http://localhost:3000/zh/tools",
+        "status": "TIMEOUT",
+        "working": false
+      }
+    ]
+  },
+  "production": {
+    "serverType": "生产",
+    "port": 3001,
+    "total": 10,
+    "working": 10,
+    "results": [
+      {
+        "url": "http://localhost:3001/",
+        "status": 200,
+        "working": true
+      },
+      {
+        "url": "http://localhost:3001/tools",
+        "status": 200,
+        "working": true
+      },
+      {
+        "url": "http://localhost:3001/tools/json-formatter",
+        "status": 200,
+        "working": true
+      },
+      {
+        "url": "http://localhost:3001/tools/base64",
+        "status": 200,
+        "working": true
+      },
+      {
+        "url": "http://localhost:3001/tools/password-generator",
+        "status": 200,
+        "working": true
+      },
+      {
+        "url": "http://localhost:3001/tools/color-picker",
+        "status": 200,
+        "working": true
+      },
+      {
+        "url": "http://localhost:3001/tools/url-encoder",
+        "status": 200,
+        "working": true
+      },
+      {
+        "url": "http://localhost:3001/tools/qr-code",
+        "status": 200,
+        "working": true
+      },
+      {
+        "url": "http://localhost:3001/zh",
+        "status": 200,
+        "working": true
+      },
+      {
+        "url": "http://localhost:3001/zh/tools",
+        "status": 200,
+        "working": true
+      }
+    ]
+  },
+  "summary": {
+    "devHealthy": false,
+    "prodHealthy": true,
+    "overallHealthy": false
+  }
+}

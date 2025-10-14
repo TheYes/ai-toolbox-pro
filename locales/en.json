@@ -1,0 +1,140 @@
+{
+  "nav": {
+    "home": "Home",
+    "tools": "Tools",
+    "language": "Language"
+  },
+  "hero": {
+    "title": "Free Online Tools for Everyone",
+    "description": "Collection of useful web tools for developers and daily use. JSON formatter, Base64 encoder, QR code generator and more - all free and easy to use.",
+    "browseTools": "Browse All Tools",
+    "featuredTools": "Featured Tools"
+  },
+  "featured": {
+    "title": "Featured Tools"
+  },
+  "features": {
+    "title": "Why Choose Our Tools?",
+    "free": {
+      "title": "Completely Free",
+      "description": "All tools are free to use without any restrictions"
+    },
+    "noAds": {
+      "title": "No Ads",
+      "description": "Clean interface without annoying advertisements"
+    },
+    "privacy": {
+      "title": "Privacy First",
+      "description": "All processing happens in your browser, no data sent to servers"
+    },
+    "fast": {
+      "title": "Lightning Fast",
+      "description": "Optimized performance for quick results"
+    }
+  },
+  "tools": {
+    "title": "All Tools",
+    "description": "Browse our complete collection of free online tools",
+    "searchPlaceholder": "Search tools...",
+    "noResults": "No tools found",
+    "tryDifferentSearch": "Try a different search term",
+    "jsonFormatter": {
+      "name": "JSON Formatter",
+      "description": "Format, validate and minify JSON data",
+      "format": "Format",
+      "minify": "Minify",
+      "validate": "Validate",
+      "features": {
+        "title": "Features:",
+        "format": "Format JSON with proper indentation",
+        "validate": "Validate JSON syntax",
+        "minify": "Minify JSON to remove unnecessary spaces",
+        "syntax": "Syntax highlighting",
+        "download": "Download formatted result"
+      }
+    },
+    "base64": {
+      "name": "Base64 Encoder/Decoder",
+      "description": "Encode and decode Base64 text",
+      "encode": "Encode",
+      "decode": "Decode",
+      "features": {
+        "title": "Features:",
+        "encode": "Encode text to Base64",
+        "decode": "Decode Base64 to text",
+        "safe": "Safe and secure processing",
+        "quick": "Quick conversion",
+        "download": "Download result as file"
+      }
+    },
+    "urlEncoder": {
+      "name": "URL Encoder/Decoder",
+      "description": "Encode and decode URLs for safe transmission",
+      "operationMode": "Operation Mode",
+      "encode": "Encode URL",
+      "decode": "Decode URL",
+      "encodePlaceholder": "Enter URL or text to encode...",
+      "decodePlaceholder": "Enter encoded URL to decode...",
+      "encodedPlaceholder": "Encoded URL will appear here...",
+      "decodedPlaceholder": "Decoded URL will appear here...",
+      "features": {
+        "title": "Features:",
+        "encode": "Encode URLs for safe transmission",
+        "decode": "Decode URLs to original format",
+        "utf8": "Support for UTF-8 characters",
+        "realtime": "Real-time encoding/decoding",
+        "copyDownload": "Copy and download results",
+        "validate": "Validate URL format"
+      },
+      "encodeSuccess": "URL encoded successfully!",
+      "decodeSuccess": "URL decoded successfully!",
+      "downloadSuccess": "File downloaded successfully!",
+      "encodedFileName": "encoded-url.txt",
+      "decodedFileName": "decoded-url.txt"
+    },
+    "qrCode": {
+      "name": "QR Code Generator",
+      "description": "Generate QR codes from text or URLs"
+    },
+    "colorPicker": {
+      "name": "Color Picker",
+      "description": "Pick colors and get different format codes"
+    },
+    "passwordGenerator": {
+      "name": "Password Generator",
+      "description": "Generate strong and secure passwords"
+    }
+  },
+  "categories": {
+    "title": "Categories",
+    "text": "Text",
+    "developer": "Developer",
+    "utility": "Utility",
+    "design": "Design",
+    "security": "Security"
+  },
+  "common": {
+    "useNow": "Use Now",
+    "input": "Input",
+    "output": "Output",
+    "copy": "Copy",
+    "download": "Download",
+    "clear": "Clear",
+    "example": "Example",
+    "swap": "Swap",
+    "backToTools": "← Back to Tools",
+    "length": "Length",
+    "characters": "characters",
+    "tools": "Tools"
+  },
+  "footer": {
+    "description": "Free online tools for developers and daily use. Simple, fast, and privacy-focused.",
+    "quickLinks": "Quick Links",
+    "categories": "Categories",
+    "support": "Support",
+    "contact": "Contact",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "allRightsReserved": "All rights reserved."
+  }
+}
