@@ -71,13 +71,17 @@ export default defineNuxtConfig({
     }
   },
 
-  // Nitro配置 - 禁用不需要的后台功能
+  // Nitro配置 - 禁用不需要的后台功能，优化SSR
   nitro: {
     experimental: {
       wasm: false
     },
     // 禁用内置的存储功能
-    storage: {}
+    storage: {},
+    // 优化渲染
+    prerender: {
+      routes: ['/']
+    }
   },
 
   // 日志配置

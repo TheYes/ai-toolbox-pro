@@ -83,6 +83,9 @@
 </template>
 
 <script setup>
-// 使用统一的国际化路由工具
+// 使用统一的国际化路由工具 - 添加SSR保护
 const { getLocalizedPath } = useI18nRouting()
+
+// 确保在客户端渲染前不执行可能导致hydration错误的代码
+const isClient = process.client
 </script>

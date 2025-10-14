@@ -52,7 +52,14 @@
       "Bash(git remote set-url origin https://github.com/TheYes/ai-toolbox-pro.git)",
       "Bash(git push origin main --timeout=30)",
       "Bash(git config --global --get http.proxy)",
-      "Bash(git config --global --get https.proxy)"
+      "Bash(git config --global --get https.proxy)",
+      "Bash(npx vercel --prod)",
+      "Bash(npx vercel --prod --yes)",
+      "Bash(git commit --allow-empty -m \"触发Vercel重新部署\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
+      "Bash(npx vercel whoami)",
+      "Bash(git add vercel.json)",
+      "Bash(git commit -m \"$(cat <<''EOF''\n修复Vercel部署配置错误\n\n- 更新vercel.json中的functions配置，将pages/api路径改为server/api\n- 同时支持.js和.ts文件，匹配实际的API文件结构\n- 解决\"The pattern doesn 't match any Serverless Functions\"错误\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(timeout 10 npm run dev)"
     ],
     "deny": [],
     "ask": []

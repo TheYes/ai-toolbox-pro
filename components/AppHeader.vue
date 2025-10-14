@@ -93,8 +93,11 @@
 </template>
 
 <script setup>
-// 使用统一的国际化路由工具
+// 使用统一的国际化路由工具 - 添加SSR保护
 const { getLocalizedPath, switchLanguage, getAvailableLocales, getCurrentLanguageInfo } = useI18nRouting()
+
+// 确保在客户端渲染前不执行可能导致hydration错误的代码
+const isClient = process.client
 
 // 响应式数据
 const showMobileMenu = ref(false)
@@ -131,13 +134,17 @@ const handleLanguageSwitch = async (localeCode) => {
   showMobileMenu.value = false
 }
 
-// 点击外部关闭语言菜单
+// 点击外部关闭语言菜单 - 只在客户端执行
 onMounted(() => {
-  document.addEventListener('click', handleClickOutside)
+  if (process.client) {
+    document.addEventListener('click', handleClickOutside)
+  }
 })
 
 onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside)
+  if (process.client) {
+    document.removeEventListener('click', handleClickOutside)
+  }
 })
 
 const handleClickOutside = (event) => {
