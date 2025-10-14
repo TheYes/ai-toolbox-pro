@@ -41,7 +41,18 @@
       "Bash(curl -s http://localhost:3000/api/pay/create -X POST -H \"Content-Type: application/json\" -d '{\"\"\"\"amount\"\"\"\": 0.01, \"\"\"\"currency\"\"\"\": \"\"\"\"USD\"\"\"\", \"\"\"\"description\"\"\"\": \"\"\"\"测试支付\"\"\"\", \"\"\"\"type\"\"\"\": \"\"\"\"one_time\"\"\"\", \"\"\"\"paymentMethod\"\"\"\": \"\"\"\"paypal\"\"\"\", \"\"\"\"successUrl\"\"\"\": \"\"\"\"http://localhost:3000/success\"\"\"\", \"\"\"\"cancelUrl\"\"\"\": \"\"\"\"http://localhost:3000/cancel\"\"\"\"}')",
       "Bash(node -c pages/api/pay/create.post.js)",
       "Bash(curl -s http://localhost:3000/api/pay/create -X POST -H \"Content-Type: application/json\" -d '{\"\"amount\"\": 0.01, \"\"currency\"\": \"\"USD\"\", \"\"description\"\": \"\"测试支付\"\", \"\"type\"\": \"\"one_time\"\", \"\"paymentMethod\"\": \"\"paypal\"\", \"\"successUrl\"\": \"\"http://localhost:3000/success\"\", \"\"cancelUrl\"\": \"\"http://localhost:3000/cancel\"\"}')",
-      "Bash(rm -f nul)"
+      "Bash(rm -f nul)",
+      "Bash(git commit -m \"修复 多语言报错问题\")",
+      "Bash(git push origin main)",
+      "Bash(git push)",
+      "Bash(ping github.com -n 2)",
+      "Bash(git config --global http.postBuffer 524288000)",
+      "Bash(git push origin main --verbose)",
+      "Bash(git remote set-url origin git@github.com:TheYes/ai-toolbox-pro.git)",
+      "Bash(git remote set-url origin https://github.com/TheYes/ai-toolbox-pro.git)",
+      "Bash(git push origin main --timeout=30)",
+      "Bash(git config --global --get http.proxy)",
+      "Bash(git config --global --get https.proxy)"
     ],
     "deny": [],
     "ask": []
