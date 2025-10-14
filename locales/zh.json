@@ -2,6 +2,7 @@
   "nav": {
     "home": "首页",
     "tools": "工具",
+    "pricing": "定价",
     "language": "语言"
   },
   "hero": {
@@ -123,7 +124,8 @@
     "swap": "交换",
     "backToTools": "← 返回工具列表",
     "length": "长度",
-    "characters": "个字符"
+    "characters": "个字符",
+    "tools": "工具"
   },
   "footer": {
     "description": "为开发者和日常使用提供的免费在线工具。简单、快速、注重隐私。",

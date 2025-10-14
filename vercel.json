@@ -39,5 +39,15 @@
       "destination": "/",
       "permanent": true
     }
-  ]
+  ],
+  "functions": {
+    "pages/api/**/*.js": {
+      "maxDuration": 30
+    }
+  },
+  "build": {
+    "env": {
+      "NUXT_PUBLIC_SITE_URL": "https://ai-toolbox-pro.vercel.app"
+    }
+  }
 }

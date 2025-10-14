@@ -19,6 +19,10 @@
                     class="text-gray-700 hover:text-primary-600 transition-colors">
             {{ $t('nav.tools') }}
           </NuxtLink>
+          <NuxtLink :to="getLocalizedPath('/pricing')"
+                    class="text-gray-700 hover:text-primary-600 transition-colors">
+            {{ $t('nav.pricing') }}
+          </NuxtLink>
 
           <!-- 语言切换 -->
           <div class="relative">
@@ -64,6 +68,11 @@
                     @click="closeMobileMenu"
                     class="text-gray-700 hover:text-primary-600 transition-colors">
             {{ $t('nav.tools') }}
+          </NuxtLink>
+          <NuxtLink :to="getLocalizedPath('/pricing')"
+                    @click="closeMobileMenu"
+                    class="text-gray-700 hover:text-primary-600 transition-colors">
+            {{ $t('nav.pricing') }}
           </NuxtLink>
 
           <!-- 移动端语言切换 -->

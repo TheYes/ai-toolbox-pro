@@ -112,11 +112,32 @@ export default defineNuxtConfig({
 
   // 运行时配置
   runtimeConfig: {
+    // 私有配置（仅服务端可用）
+    creemApiKey: process.env.CREEM_API_KEY,
+    creemSecretKey: process.env.CREEM_SECRET_KEY,
+    creemWebhookSecret: process.env.CREEM_WEBHOOK_SECRET,
+    paypalClientId: process.env.PAYPAL_CLIENT_ID,
+    paypalClientSecret: process.env.PAYPAL_CLIENT_SECRET,
+    stripeSecretKey: process.env.STRIPE_SECRET_KEY,
+    stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
+
     // 公共配置（暴露给客户端）
     public: {
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://ai-toolbox-pro.vercel.app',
       siteName: 'AI Toolbox Pro - Free Online Tools',
-      siteDescription: 'Collection of useful web tools for developers and daily use. JSON formatter, Base64 encoder, QR code generator and more - all free and easy to use.'
+      siteDescription: 'Collection of useful web tools for developers and daily use. JSON formatter, Base64 encoder, QR code generator and more - all free and easy to use.',
+      currency: process.env.NUXT_PUBLIC_CURRENCY || 'USD',
+      creemPublishableKey: process.env.CREEM_API_KEY,
+      paypalClientId: process.env.PAYPAL_CLIENT_ID,
+      stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+
+      // 支付配置
+      payment: {
+        enabled: true,
+        methods: ['creem', 'paypal'],
+        currency: 'USD',
+        locale: 'en'
+      }
     },
     // 禁用 Node.js 实验性功能警告
     nitro: {
