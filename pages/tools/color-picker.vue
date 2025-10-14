@@ -2,7 +2,7 @@
   <div class="tool-container">
     <!-- 工具头部 -->
     <div class="tool-header">
-      <NuxtLink to="/tools" class="text-primary-600 hover:text-primary-700 mb-4 inline-block">
+      <NuxtLink :to="getLocalizedPath('/tools')" class="text-primary-600 hover:text-primary-700 mb-4 inline-block">
         ← Back to Tools
       </NuxtLink>
       <h1 class="tool-title">{{ $t('tools.colorPicker.name') }}</h1>
@@ -199,6 +199,16 @@
 <script setup>
 // 导入国际化函数
 const { t } = useI18n()
+
+// 路由函数
+const { $i18n } = useNuxtApp()
+const getLocalizedPath = (path) => {
+  const currentLocale = $i18n.locale.value
+  if (path === '/') {
+    return `/${currentLocale}`
+  }
+  return `/${currentLocale}${path}`
+}
 
 // SEO设置
 useHead({

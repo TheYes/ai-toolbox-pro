@@ -10,7 +10,7 @@
           {{ $t('hero.description') }}
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <NuxtLink to="/tools" class="btn-primary text-lg px-8 py-3">
+          <NuxtLink :to="getLocalizedPath('/tools')" class="btn-primary text-lg px-8 py-3">
             {{ $t('hero.browseTools') }}
           </NuxtLink>
           <a href="#featured-tools" class="btn-secondary text-lg px-8 py-3">
@@ -33,7 +33,7 @@
               <div class="text-4xl mb-4">{{ tool.icon }}</div>
               <h3 class="text-xl font-semibold mb-2">{{ $t(tool.name) }}</h3>
               <p class="text-gray-600 mb-4">{{ $t(tool.description) }}</p>
-              <NuxtLink :to="tool.link" class="btn-primary">
+              <NuxtLink :to="getLocalizedPath(tool.link)" class="btn-primary">
                 {{ $t('common.useNow') }}
               </NuxtLink>
             </div>
@@ -61,6 +61,19 @@
 </template>
 
 <script setup>
+// 获取当前语言和路由
+const { $i18n } = useNuxtApp()
+const route = useRoute()
+
+// 简单的路由函数，直接生成带语言前缀的路径
+const getLocalizedPath = (path) => {
+  const currentLocale = $i18n.locale.value
+  if (path === '/') {
+    return `/${currentLocale}`
+  }
+  return `/${currentLocale}${path}`
+}
+
 // SEO设置
 useHead({
   title: 'Free Online Tools for Developers and Daily Use - AI Toolbox Pro',

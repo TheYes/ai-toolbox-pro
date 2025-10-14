@@ -61,7 +61,9 @@ export default defineNuxtConfig({
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: 'description', content: 'Free online tools for developers and daily use' },
-        { name: 'keywords', content: 'online tools, web tools, json formatter, base64 encoder, qr code generator, free tools' }
+        { name: 'keywords', content: 'online tools, web tools, json formatter, base64 encoder, qr code generator, free tools' },
+        // 可以在这里添加自定义域名的 meta 标签
+        // { property: 'og:url', content: 'https://yourdomain.com' }
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
@@ -95,23 +97,27 @@ export default defineNuxtConfig({
         file: 'zh.json'
       }
     ],
-    defaultLocale: 'en',
+    defaultLocale: 'zh',
     langDir: 'locales',
     lazy: true,
-    strategy: 'prefix_except_default',
+    strategy: 'prefix',
     detectBrowserLanguage: {
       useCookie: true,
-      cookieKey: 'i18n_redirected',
+      cookieKey: 'user_language',
       redirectOn: 'root',
-      alwaysRedirect: false
-    },
-    // 为SSR优化
-    restructureDir: false,
-    skipSettingLocaleOnNavigate: false
+      alwaysRedirect: false,
+      fallbackLocale: 'zh'
+    }
   },
 
   // 运行时配置
   runtimeConfig: {
+    // 公共配置（暴露给客户端）
+    public: {
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://ai-toolbox-pro.vercel.app',
+      siteName: 'AI Toolbox Pro - Free Online Tools',
+      siteDescription: 'Collection of useful web tools for developers and daily use. JSON formatter, Base64 encoder, QR code generator and more - all free and easy to use.'
+    },
     // 禁用 Node.js 实验性功能警告
     nitro: {
       experimental: {

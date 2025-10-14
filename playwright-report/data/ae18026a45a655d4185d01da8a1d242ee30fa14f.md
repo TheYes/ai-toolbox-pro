@@ -1,0 +1,110 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e4]:
+  - banner [ref=e5]:
+    - navigation [ref=e6]:
+      - generic [ref=e7]:
+        - link "🛠️ AI Toolbox" [ref=e8] [cursor=pointer]:
+          - /url: /en
+          - generic [ref=e9]: 🛠️ AI Toolbox
+        - generic [ref=e10]:
+          - link "Home" [ref=e11] [cursor=pointer]:
+            - /url: /en
+          - link "Tools" [ref=e12] [cursor=pointer]:
+            - /url: /en/tools
+          - button "🌐 English" [ref=e14] [cursor=pointer]:
+            - generic [ref=e15]: 🌐
+            - generic [ref=e16]: English
+            - img [ref=e17]
+  - main [ref=e19]:
+    - generic [ref=e20]:
+      - generic [ref=e22]:
+        - heading "Free Online Tools for Everyone" [level=1] [ref=e23]
+        - paragraph [ref=e24]: Collection of useful web tools for developers and daily use. JSON formatter, Base64 encoder, QR code generator and more - all free and easy to use.
+        - generic [ref=e25]:
+          - link "Browse All Tools" [ref=e26] [cursor=pointer]:
+            - /url: /en/tools
+          - link "Featured Tools" [ref=e27] [cursor=pointer]:
+            - /url: "#featured-tools"
+      - generic [ref=e29]:
+        - heading "Featured Tools" [level=2] [ref=e30]
+        - generic [ref=e31]:
+          - generic [ref=e33]:
+            - generic [ref=e34]: 📝
+            - heading "JSON Formatter" [level=3] [ref=e35]
+            - paragraph [ref=e36]: Format, validate and minify JSON data
+            - link "Use Now" [ref=e37] [cursor=pointer]:
+              - /url: /en/tools/json-formatter
+          - generic [ref=e39]:
+            - generic [ref=e40]: 🔐
+            - heading "Base64 Encoder/Decoder" [level=3] [ref=e41]
+            - paragraph [ref=e42]: Encode and decode Base64 text
+            - link "Use Now" [ref=e43] [cursor=pointer]:
+              - /url: /en/tools/base64
+          - generic [ref=e45]:
+            - generic [ref=e46]: 📱
+            - heading "QR Code Generator" [level=3] [ref=e47]
+            - paragraph [ref=e48]: Generate QR codes from text or URLs
+            - link "Use Now" [ref=e49] [cursor=pointer]:
+              - /url: /en/tools/qr-code
+      - generic [ref=e51]:
+        - heading "Why Choose Our Tools?" [level=2] [ref=e52]
+        - generic [ref=e53]:
+          - generic [ref=e54]:
+            - generic [ref=e55]: 🆓
+            - heading "Completely Free" [level=3] [ref=e56]
+            - paragraph [ref=e57]: All tools are free to use without any restrictions
+          - generic [ref=e58]:
+            - generic [ref=e59]: 🚫
+            - heading "No Ads" [level=3] [ref=e60]
+            - paragraph [ref=e61]: Clean interface without annoying advertisements
+          - generic [ref=e62]:
+            - generic [ref=e63]: 🔒
+            - heading "Privacy First" [level=3] [ref=e64]
+            - paragraph [ref=e65]: All processing happens in your browser, no data sent to servers
+          - generic [ref=e66]:
+            - generic [ref=e67]: ⚡
+            - heading "Lightning Fast" [level=3] [ref=e68]
+            - paragraph [ref=e69]: Optimized performance for quick results
+  - contentinfo [ref=e70]:
+    - generic [ref=e71]:
+      - generic [ref=e72]:
+        - generic [ref=e73]:
+          - generic [ref=e75]: 🛠️ AI Toolbox
+          - paragraph [ref=e76]: Free online tools for developers and daily use. Simple, fast, and privacy-focused.
+        - generic [ref=e77]:
+          - heading "Quick Links" [level=3] [ref=e78]
+          - list [ref=e79]:
+            - listitem [ref=e80]:
+              - link "Home" [ref=e81] [cursor=pointer]:
+                - /url: /undefined
+            - listitem [ref=e82]:
+              - link "Tools" [ref=e83] [cursor=pointer]:
+                - /url: /undefined/tools
+        - generic [ref=e84]:
+          - heading "Categories" [level=3] [ref=e85]
+          - list [ref=e86]:
+            - listitem [ref=e87]:
+              - link "Text" [ref=e88] [cursor=pointer]:
+                - /url: /undefined/tools?category=text
+            - listitem [ref=e89]:
+              - link "Developer" [ref=e90] [cursor=pointer]:
+                - /url: /undefined/tools?category=developer
+            - listitem [ref=e91]:
+              - link "Utility" [ref=e92] [cursor=pointer]:
+                - /url: /undefined/tools?category=utility
+        - generic [ref=e93]:
+          - heading "Support" [level=3] [ref=e94]
+          - list [ref=e95]:
+            - listitem [ref=e96]:
+              - link "Contact" [ref=e97] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e98]:
+              - link "Privacy Policy" [ref=e99] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e100]:
+              - link "Terms of Service" [ref=e101] [cursor=pointer]:
+                - /url: "#"
+      - paragraph [ref=e103]: © 2024 AI Toolbox Pro. All rights reserved.
+```

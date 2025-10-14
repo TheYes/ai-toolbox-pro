@@ -2,7 +2,7 @@
   <div class="tool-container">
     <!-- 工具头部 -->
     <div class="tool-header">
-      <NuxtLink to="/tools" class="text-primary-600 hover:text-primary-700 mb-4 inline-block">
+      <NuxtLink :to="getLocalizedPath('/tools')" class="text-primary-600 hover:text-primary-700 mb-4 inline-block">
         ← {{ t('common.backToTools') }}
       </NuxtLink>
       <h1 class="tool-title">{{ t('tools.jsonFormatter.name') }}</h1>
@@ -97,6 +97,16 @@
 <script setup>
 // 导入国际化函数
 const { t } = useI18n()
+const { $i18n } = useNuxtApp()
+
+// 简单的路由函数
+const getLocalizedPath = (path) => {
+  const currentLocale = $i18n.locale.value
+  if (path === '/') {
+    return `/${currentLocale}`
+  }
+  return `/${currentLocale}${path}`
+}
 
 // SEO设置
 useHead({

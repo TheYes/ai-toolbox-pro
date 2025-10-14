@@ -3,7 +3,7 @@
     <nav class="container mx-auto px-6 py-4">
       <div class="flex justify-between items-center">
         <!-- Logo -->
-        <NuxtLink :to="`/${$i18n.locale.value}`" class="flex items-center space-x-2">
+        <NuxtLink :to="getLocalizedPath('/')" class="flex items-center space-x-2">
           <div class="text-2xl font-bold text-primary-600">
             🛠️ AI Toolbox
           </div>
@@ -11,11 +11,11 @@
 
         <!-- 桌面导航 -->
         <div class="hidden md:flex items-center space-x-8">
-          <NuxtLink :to="`/${$i18n.locale.value}`"
+          <NuxtLink :to="getLocalizedPath('/')"
                     class="text-gray-700 hover:text-primary-600 transition-colors">
             {{ $t('nav.home') }}
           </NuxtLink>
-          <NuxtLink :to="`/${$i18n.locale.value}/tools`"
+          <NuxtLink :to="getLocalizedPath('/tools')"
                     class="text-gray-700 hover:text-primary-600 transition-colors">
             {{ $t('nav.tools') }}
           </NuxtLink>
@@ -55,12 +55,12 @@
       <!-- 移动端菜单 -->
       <div v-if="showMobileMenu" class="md:hidden mt-4 pt-4 border-t border-gray-200">
         <div class="flex flex-col space-y-3">
-          <NuxtLink :to="`/${$i18n.locale.value}`"
+          <NuxtLink :to="getLocalizedPath('/')"
                     @click="closeMobileMenu"
                     class="text-gray-700 hover:text-primary-600 transition-colors">
             {{ $t('nav.home') }}
           </NuxtLink>
-          <NuxtLink :to="`/${$i18n.locale.value}/tools`"
+          <NuxtLink :to="getLocalizedPath('/tools')"
                     @click="closeMobileMenu"
                     class="text-gray-700 hover:text-primary-600 transition-colors">
             {{ $t('nav.tools') }}
@@ -86,6 +86,21 @@
 <script setup>
 const { $i18n } = useNuxtApp()
 const router = useRouter()
+
+// 简单的路由函数
+const getLocalizedPath = (path) => {
+  const currentLocale = $i18n.locale.value
+  if (path === '/') {
+    return `/${currentLocale}`
+  }
+  return `/${currentLocale}${path}`
+}
+
+// 语言切换路径
+const switchLocalePath = (targetLocale) => {
+  const currentPath = router.currentRoute.value.path
+  return currentPath.replace(/^\/[a-z]{2}/, `/${targetLocale}`)
+}
 
 // 响应式数据
 const showMobileMenu = ref(false)
@@ -122,11 +137,14 @@ const toggleLanguageMenu = () => {
 
 // 切换语言
 const switchLanguage = async (localeCode) => {
-  const currentPath = router.currentRoute.value.path
-  const newPath = currentPath.replace(/^\/[^\/]+/, `/${localeCode}`)
+  // 保存用户语言偏好到 Cookie
+  if (process.client) {
+    document.cookie = `user_language=${localeCode}; path=/; max-age=31536000` // 保存一年
+  }
 
+  // 切换语言并导航
   await $i18n.setLocale(localeCode)
-  await router.push(newPath)
+  await router.push(switchLocalePath(localeCode))
 
   showLanguageMenu.value = false
   showMobileMenu.value = false
