@@ -83,32 +83,44 @@
 </template>
 
 <script setup>
-// 简化的SSR安全版本
+// 完全客户端渲染的版本 - 避免所有SSR hydration问题
 const isClient = process.client
 
-// 静态导航文本
-const navTexts = computed(() => {
+// 导航文本 - 默认英文
+const navTexts = ref({
+  home: 'Home',
+  tools: 'Tools'
+})
+
+// 底部文本 - 默认英文
+const footerTexts = ref({
+  description: 'AI-powered online tools collection website for developers and daily use.',
+  quickLinks: 'Quick Links',
+  categories: 'Categories',
+  support: 'Support',
+  contact: 'Contact',
+  privacy: 'Privacy Policy',
+  terms: 'Terms of Service',
+  allRightsReserved: 'All Rights Reserved'
+})
+
+// 分类文本 - 默认英文
+const categoryTexts = ref({
+  text: 'Text Tools',
+  developer: 'Developer Tools',
+  utility: 'Utility Tools'
+})
+
+// 客户端初始化
+onMounted(() => {
   if (isClient) {
     const currentPath = window.location.pathname
     if (currentPath.startsWith('/zh')) {
-      return {
+      navTexts.value = {
         home: '首页',
         tools: '工具'
       }
-    }
-  }
-  return {
-    home: 'Home',
-    tools: 'Tools'
-  }
-})
-
-// 底部文本
-const footerTexts = computed(() => {
-  if (isClient) {
-    const currentPath = window.location.pathname
-    if (currentPath.startsWith('/zh')) {
-      return {
+      footerTexts.value = {
         description: 'AI驱动的在线小工具集合网站，为开发者和日常使用提供便利的工具。',
         quickLinks: '快速链接',
         categories: '工具分类',
@@ -118,36 +130,12 @@ const footerTexts = computed(() => {
         terms: '服务条款',
         allRightsReserved: '版权所有'
       }
-    }
-  }
-  return {
-    description: 'AI-powered online tools collection website for developers and daily use.',
-    quickLinks: 'Quick Links',
-    categories: 'Categories',
-    support: 'Support',
-    contact: 'Contact',
-    privacy: 'Privacy Policy',
-    terms: 'Terms of Service',
-    allRightsReserved: 'All Rights Reserved'
-  }
-})
-
-// 分类文本
-const categoryTexts = computed(() => {
-  if (isClient) {
-    const currentPath = window.location.pathname
-    if (currentPath.startsWith('/zh')) {
-      return {
+      categoryTexts.value = {
         text: '文本工具',
         developer: '开发者工具',
         utility: '实用工具'
       }
     }
-  }
-  return {
-    text: 'Text Tools',
-    developer: 'Developer Tools',
-    utility: 'Utility Tools'
   }
 })
 </script>

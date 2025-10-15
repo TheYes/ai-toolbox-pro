@@ -63,7 +63,14 @@
       "Bash(git commit -m \"$(cat <<''EOF''\n修复头部和底部组件不显示问题\n\n- 使用ClientOnly包装AppHeader和AppFooter组件，避免SSR hydration错误\n- 添加fallback模板确保在SSR时显示基本结构\n- 优化Nuxt配置，添加prerender路由\n- 增强组件的SSR兼容性，添加process.client检查\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
       "Bash(npm run start)",
       "mcp__playwright__browser_console_messages",
-      "Bash(PORT=3002 npm run start)"
+      "Bash(PORT=3002 npm run start)",
+      "Bash(git commit -m \"$(cat <<''EOF''\n完全修复头部和底部组件显示问题\n\n- 简化AppHeader和AppFooter组件，移除i18n依赖避免hydration不匹配\n- 使用静态文本和客户端路径检测实现语言切换功能\n- 移除useI18nRouting依赖，采用简单直接的路径处理\n- 确保组件完全SSR兼容，消除hydration错误\n- 本地测试确认头部底部正常显示\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git config --global --unset http.proxy)",
+      "Bash(git config --global --unset https.proxy)",
+      "Bash(git config --global --unset-all http.proxy)",
+      "Bash(git config --global --unset-all https.proxy)",
+      "Bash(git push origin main --timeout=60)",
+      "Bash(timeout 60 git push origin main)"
     ],
     "deny": [],
     "ask": []

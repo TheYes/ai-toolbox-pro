@@ -93,48 +93,45 @@
 </template>
 
 <script setup>
-// 简化的SSR安全版本
+// 完全客户端渲染的版本 - 避免所有SSR hydration问题
 const isClient = process.client
 
 // 响应式数据
 const showMobileMenu = ref(false)
 const showLanguageMenu = ref(false)
 
-// 静态导航文本 - 避免i18n hydration问题
-const navTexts = computed(() => {
-  // 基本的导航文本，根据当前语言动态设置
-  if (isClient) {
-    const currentPath = window.location.pathname
-    if (currentPath.startsWith('/zh')) {
-      return {
-        home: '首页',
-        tools: '工具',
-        pricing: '定价'
-      }
-    }
-  }
-  return {
-    home: 'Home',
-    tools: 'Tools',
-    pricing: 'Pricing'
-  }
+// 导航文本 - 客户端动态计算
+const navTexts = ref({
+  home: 'Home',
+  tools: 'Tools',
+  pricing: 'Pricing'
 })
 
-// 可用语言 - 简化版本
+// 可用语言
 const availableLocales = [
   { code: 'en', name: 'English' },
   { code: 'zh', name: '中文' }
 ]
 
-// 当前语言 - 简化版本
-const currentLanguage = computed(() => {
+// 当前语言
+const currentLanguage = ref({
+  code: 'en',
+  name: 'English'
+})
+
+// 客户端初始化
+onMounted(() => {
   if (isClient) {
     const currentPath = window.location.pathname
     if (currentPath.startsWith('/zh')) {
-      return { code: 'zh', name: '中文' }
+      navTexts.value = {
+        home: '首页',
+        tools: '工具',
+        pricing: '定价'
+      }
+      currentLanguage.value = { code: 'zh', name: '中文' }
     }
   }
-  return { code: 'en', name: 'English' }
 })
 
 // 切换移动端菜单

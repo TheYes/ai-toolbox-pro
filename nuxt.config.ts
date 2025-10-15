@@ -18,7 +18,8 @@ export default defineNuxtConfig({
     renderJsonPayloads: false,
     crossPrefetch: false,
     viewTransition: false,
-    watcher: 'parcel'
+    watcher: 'parcel',
+    clientNodeCompat: true
   },
 
   // CSS配置
@@ -78,9 +79,9 @@ export default defineNuxtConfig({
     },
     // 禁用内置的存储功能
     storage: {},
-    // 优化渲染
+    // 优化渲染 - 添加更多路由预渲染
     prerender: {
-      routes: ['/']
+      routes: ['/', '/zh', '/tools', '/zh/tools', '/pricing', '/zh/pricing']
     }
   },
 
