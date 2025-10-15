@@ -1,9 +1,10 @@
 /**
  * 创建支付接口
- * 支持 Creem 和 PayPal 支付方式
+ * 支持 Creem、PayPal 和 Stripe 支付方式
  */
 
 import crypto from 'crypto'
+import { createUniversalPayment, PAYMENT_PROVIDERS } from '~/shared/payment/universal-payment.js'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -30,7 +31,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // 验证支付方式
-    const validPaymentMethods = ['creem', 'paypal']
+    const validPaymentMethods = [PAYMENT_PROVIDERS.CREEM, PAYMENT_PROVIDERS.PAYPAL, PAYMENT_PROVIDERS.STRIPE]
     if (!validPaymentMethods.includes(body.paymentMethod)) {
       throw createError({
         statusCode: 400,
@@ -73,23 +74,30 @@ export default defineEventHandler(async (event) => {
 
     let response
 
-    // 根据支付方式创建支付
-    switch (body.paymentMethod) {
-      case 'creem':
-        response = await createCreemPayment(paymentData, config)
-        break
-      case 'paypal':
-        response = await createPayPalPayment(paymentData, config)
-        break
-      default:
-        throw createError({
-          statusCode: 400,
-          statusMessage: '不支持的支付方式'
-        })
-    }
+    // 初始化通用支付模块
+    const universalPayment = createUniversalPayment(config)
 
-    // 保存支付记录到数据库或文件
-    await savePaymentRecord(paymentData)
+    // 使用通用支付模块创建支付会话
+    const paymentSession = await universalPayment.createPaymentSession(
+      body.paymentMethod,
+      {
+        id: paymentId,
+        amount: paymentData.amount,
+        currency: paymentData.currency,
+        description: paymentData.description,
+        type: paymentData.type,
+        successUrl: paymentData.successUrl,
+        cancelUrl: paymentData.cancelUrl,
+        planId: paymentData.planId,
+        toolId: paymentData.toolId,
+        metadata: paymentData.metadata
+      }
+    )
+
+    response = paymentSession.payment
+
+    // 保存支付记录到存储
+    await savePaymentRecord(paymentId, body.paymentMethod, paymentData, response)
 
     return {
       success: true,
@@ -110,99 +118,31 @@ export default defineEventHandler(async (event) => {
 })
 
 /**
- * 创建 Creem 支付
- */
-async function createCreemPayment(paymentData, config) {
-  try {
-    // 这里需要根据 Creem 的实际 API 调整
-    // 由于没有 Creem 的具体 API 文档，这里提供一个模拟实现
-
-    if (!config.creemApiKey) {
-      throw new Error('Creem API Key 未配置')
-    }
-
-    // 模拟 Creem API 调用
-    const creemResponse = {
-      checkoutUrl: `https://checkout.creem.io/pay/${paymentData.id}`,
-      paymentId: paymentData.id,
-      expiresAt: new Date(Date.now() + 30 * 60 * 1000).toISOString() // 30分钟后过期
-    }
-
-    return {
-      checkoutUrl: creemResponse.checkoutUrl,
-      paymentId: creemResponse.paymentId,
-      expiresAt: creemResponse.expiresAt
-    }
-
-  } catch (error) {
-    console.error('Creem 支付创建失败:', error)
-    throw new Error('Creem 支付创建失败')
-  }
-}
-
-/**
- * 创建 PayPal 支付
- */
-async function createPayPalPayment(paymentData, config) {
-  try {
-    if (!config.paypalClientId) {
-      throw new Error('PayPal Client ID 未配置')
-    }
-
-    // PayPal 订单创建逻辑
-    const paypalOrder = {
-      intent: 'CAPTURE',
-      purchase_units: [{
-        amount: {
-          currency_code: paymentData.currency,
-          value: paymentData.amount.toString()
-        },
-        description: paymentData.description,
-        custom_id: paymentData.id
-      }],
-      application_context: {
-        return_url: paymentData.successUrl,
-        cancel_url: paymentData.cancelUrl,
-        brand_name: 'AI Toolbox Pro',
-        locale: 'en-US',
-        user_action: 'PAY_NOW'
-      }
-    }
-
-    // 这里需要调用 PayPal 的实际 API
-    // 模拟 PayPal API 响应
-    const paypalResponse = {
-      orderID: `paypal_${paymentData.id}`,
-      approvalUrl: `https://www.sandbox.paypal.com/checkoutnow?token=${paypalOrder.custom_id}`
-    }
-
-    return {
-      orderId: paypalResponse.orderID,
-      approvalUrl: paypalResponse.approvalUrl
-    }
-
-  } catch (error) {
-    console.error('PayPal 支付创建失败:', error)
-    throw new Error('PayPal 支付创建失败')
-  }
-}
-
-/**
  * 保存支付记录
- * 这里应该保存到数据库，目前简化为文件存储
  */
-async function savePaymentRecord(paymentData) {
+async function savePaymentRecord(paymentId, paymentMethod, originalData, paymentResponse) {
   try {
-    // 在实际应用中，这里应该保存到数据库
-    // 目前只是模拟保存操作
-    console.log('保存支付记录:', paymentData.id)
+    const storage = useStorage()
+    const paymentRecord = {
+      id: paymentId,
+      provider: paymentMethod,
+      type: originalData.type,
+      amount: originalData.amount,
+      currency: originalData.currency,
+      description: originalData.description,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      metadata: originalData.metadata,
+      paymentResponse: paymentResponse
+    }
 
-    // 可以使用 Nitro 的存储功能
-    // const storage = useStorage()
-    // await storage.setItem(`payments:${paymentData.id}`, paymentData)
+    await storage.setItem(`payments:${paymentId}`, paymentRecord)
+    console.log('支付记录已保存:', paymentId)
 
   } catch (error) {
     console.error('保存支付记录失败:', error)
     // 不抛出错误，避免影响支付流程
   }
 }
+

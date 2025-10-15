@@ -9,14 +9,14 @@ const http = require('http');
 
 // 测试配置
 const TEST_CONFIG = {
-  baseUrl: 'http://localhost:3000',
+  baseUrl: 'http://localhost:3002',
   testPayment: {
     amount: 0.01, // 使用最小金额进行测试
     currency: 'USD',
     description: 'API 测试支付 - AI Toolbox Pro',
     type: 'one_time',
-    successUrl: 'http://localhost:3000/payment/success',
-    cancelUrl: 'http://localhost:3000/payment/cancel'
+    successUrl: 'http://localhost:3002/payment/success',
+    cancelUrl: 'http://localhost:3002/payment/cancel'
   }
 };
 

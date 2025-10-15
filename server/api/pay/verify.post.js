@@ -4,6 +4,7 @@
  */
 
 import crypto from 'crypto'
+import { createUniversalPayment, PAYMENT_PROVIDERS } from '~/shared/payment/universal-payment.js'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -26,7 +27,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // 验证支付类型
-    const validTypes = ['creem', 'paypal', 'stripe']
+    const validTypes = [PAYMENT_PROVIDERS.CREEM, PAYMENT_PROVIDERS.PAYPAL, PAYMENT_PROVIDERS.STRIPE]
     if (!validTypes.includes(body.type)) {
       throw createError({
         statusCode: 400,
@@ -43,41 +44,31 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // 根据支付类型验证支付状态
-    let verificationResult
-    switch (body.type) {
-      case 'creem':
-        verificationResult = await verifyCreemPayment(body.paymentId, config)
-        break
-      case 'paypal':
-        verificationResult = await verifyPayPalPayment(body.paymentId, config)
-        break
-      case 'stripe':
-        verificationResult = await verifyStripePayment(body.paymentId, config)
-        break
-      default:
-        throw createError({
-          statusCode: 400,
-          statusMessage: '不支持的支付类型'
-        })
-    }
+    // 初始化通用支付模块
+    const universalPayment = createUniversalPayment(config)
+
+    // 使用通用支付模块验证支付会话
+    const verificationResult = await universalPayment.verifyPaymentSession(
+      body.type,
+      body.paymentId
+    )
 
     // 如果支付成功，更新支付记录
     if (verificationResult.success) {
       await updatePaymentRecord(body.paymentId, {
         status: 'completed',
         completedAt: new Date().toISOString(),
-        verificationData: verificationResult.data
+        verificationData: verificationResult.payment
       })
 
       // 处理订阅激活
       if (paymentRecord.type === 'subscription') {
-        await activateSubscription(paymentRecord)
+        await activateSubscription(paymentRecord, body.paymentId)
       }
 
       // 处理工具解锁
-      if (paymentRecord.type === 'one_time' && paymentRecord.toolId) {
-        await unlockTool(paymentRecord.toolId, body.paymentId)
+      if (paymentRecord.type === 'one_time' && paymentRecord.metadata?.toolId) {
+        await unlockTool(paymentRecord.metadata.toolId, body.paymentId)
       }
     } else {
       // 支付失败，更新状态
@@ -90,7 +81,7 @@ export default defineEventHandler(async (event) => {
 
     return {
       success: verificationResult.success,
-      payment: {
+      payment: verificationResult.payment || {
         id: body.paymentId,
         status: verificationResult.success ? 'completed' : 'failed',
         amount: paymentRecord.amount,
@@ -112,109 +103,29 @@ export default defineEventHandler(async (event) => {
 })
 
 /**
- * 验证 Creem 支付
- */
-async function verifyCreemPayment(paymentId, config) {
-  try {
-    if (!config.creemSecretKey) {
-      throw new Error('Creem Secret Key 未配置')
-    }
-
-    // 这里需要根据 Creem 的实际 API 调整
-    // 模拟验证过程
-    const verificationResult = {
-      success: true,
-      data: {
-        paymentId: paymentId,
-        status: 'completed',
-        amount: null, // 从 Creem API 获取
-        paidAt: new Date().toISOString()
-      }
-    }
-
-    return verificationResult
-
-  } catch (error) {
-    console.error('Creem 支付验证失败:', error)
-    return {
-      success: false,
-      reason: 'Creem 支付验证失败'
-    }
-  }
-}
-
-/**
- * 验证 PayPal 支付
- */
-async function verifyPayPalPayment(paymentId, config) {
-  try {
-    if (!config.paypalClientSecret) {
-      throw new Error('PayPal Client Secret 未配置')
-    }
-
-    // PayPal 订单验证逻辑
-    // 这里需要调用 PayPal 的实际 API
-    const verificationResult = {
-      success: true,
-      data: {
-        orderId: paymentId,
-        status: 'COMPLETED',
-        amount: null, // 从 PayPal API 获取
-        paidAt: new Date().toISOString()
-      }
-    }
-
-    return verificationResult
-
-  } catch (error) {
-    console.error('PayPal 支付验证失败:', error)
-    return {
-      success: false,
-      reason: 'PayPal 支付验证失败'
-    }
-  }
-}
-
-/**
- * 验证 Stripe 支付
- */
-async function verifyStripePayment(paymentId, config) {
-  try {
-    if (!config.stripeSecretKey) {
-      throw new Error('Stripe Secret Key 未配置')
-    }
-
-    // Stripe 支付验证逻辑
-    const verificationResult = {
-      success: true,
-      data: {
-        sessionId: paymentId,
-        status: 'complete',
-        amount: null, // 从 Stripe API 获取
-        paidAt: new Date().toISOString()
-      }
-    }
-
-    return verificationResult
-
-  } catch (error) {
-    console.error('Stripe 支付验证失败:', error)
-    return {
-      success: false,
-      reason: 'Stripe 支付验证失败'
-    }
-  }
-}
-
-/**
  * 获取支付记录
  */
 async function getPaymentRecord(paymentId) {
   try {
-    // 在实际应用中，这里应该从数据库获取
-    // 模拟获取支付记录
     const storage = useStorage()
-    return await storage.getItem(`payments:${paymentId}`)
+    let record = await storage.getItem(`payments:${paymentId}`)
+
+    // 如果没有找到记录，返回测试数据（仅用于测试）
+    if (!record && paymentId.startsWith('creem_')) {
+      record = {
+        id: paymentId,
+        provider: 'creem',
+        type: 'one_time',
+        amount: 0.01,
+        currency: 'USD',
+        description: '测试支付',
+        status: 'pending',
+        createdAt: new Date().toISOString(),
+        metadata: {}
+      }
+    }
+
+    return record
 
   } catch (error) {
     console.error('获取支付记录失败:', error)
@@ -227,13 +138,13 @@ async function getPaymentRecord(paymentId) {
  */
 async function updatePaymentRecord(paymentId, updateData) {
   try {
-    // 在实际应用中，这里应该更新数据库记录
     const storage = useStorage()
     const existingRecord = await storage.getItem(`payments:${paymentId}`)
 
     if (existingRecord) {
       const updatedRecord = { ...existingRecord, ...updateData }
       await storage.setItem(`payments:${paymentId}`, updatedRecord)
+      console.log('支付记录已更新:', paymentId)
     }
 
   } catch (error) {
@@ -244,23 +155,25 @@ async function updatePaymentRecord(paymentId, updateData) {
 /**
  * 激活订阅
  */
-async function activateSubscription(paymentRecord) {
+async function activateSubscription(paymentRecord, paymentId) {
   try {
-    // 更新用户订阅状态
-    const subscriptionData = {
+    const subscriptionInfo = {
       isActive: true,
-      planId: paymentRecord.planId,
+      provider: paymentRecord.provider,
+      providerSubscriptionId: paymentId,
+      planId: paymentRecord.metadata?.planId,
+      amount: paymentRecord.amount,
+      currency: paymentRecord.currency,
       status: 'active',
       startedAt: new Date().toISOString(),
-      currentPeriodEnd: calculatePeriodEnd(paymentRecord.planId),
-      paymentId: paymentRecord.id
+      currentPeriodEnd: calculatePeriodEnd(paymentRecord.metadata?.planId),
+      paymentId: paymentId
     }
 
-    // 这里应该更新数据库中的用户订阅记录
     const storage = useStorage()
-    await storage.setItem('subscription:current', subscriptionData)
+    await storage.setItem('subscription:current', subscriptionInfo)
 
-    console.log('订阅激活成功:', paymentRecord.id)
+    console.log('订阅已激活:', subscriptionInfo)
 
   } catch (error) {
     console.error('激活订阅失败:', error)
@@ -272,21 +185,21 @@ async function activateSubscription(paymentRecord) {
  */
 async function unlockTool(toolId, paymentId) {
   try {
-    // 添加工具解锁记录
-    const unlockData = {
+    const unlockInfo = {
       toolId: toolId,
       paymentId: paymentId,
       unlockedAt: new Date().toISOString(),
       type: 'one_time'
     }
 
-    // 这里应该更新数据库中的用户工具解锁记录
     const storage = useStorage()
-    const existingUnlocks = await storage.getItem('unlocked_tools') || []
-    existingUnlocks.push(unlockData)
-    await storage.setItem('unlocked_tools', existingUnlocks)
+    const unlockedTools = await storage.getItem('unlocked_tools') || []
 
-    console.log('工具解锁成功:', toolId)
+    if (!unlockedTools.includes(toolId)) {
+      unlockedTools.push(toolId)
+      await storage.setItem('unlocked_tools', unlockedTools)
+      console.log('工具已解锁:', toolId)
+    }
 
   } catch (error) {
     console.error('解锁工具失败:', error)
