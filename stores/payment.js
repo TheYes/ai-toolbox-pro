@@ -96,6 +96,24 @@ export const usePaymentStore = defineStore('payment', {
       this.error = null
     },
 
+    // 显示订阅支付弹窗（简化方法）
+    async showSubscriptionPayment(planId) {
+      const { pricingPlans } = usePayment()
+      const plan = pricingPlans[planId]
+
+      if (!plan) {
+        throw new Error(`订阅计划 ${planId} 不存在`)
+      }
+
+      this.showPaymentModal({
+        amount: plan.price,
+        currency: plan.currency,
+        description: plan.name,
+        type: 'subscription',
+        planId: planId
+      })
+    },
+
     // 隐藏支付弹窗
     hidePaymentModal() {
       this.paymentModalVisible = false

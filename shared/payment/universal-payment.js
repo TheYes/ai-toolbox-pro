@@ -48,13 +48,19 @@ export class UniversalPayment {
    */
   initializeProviders() {
     // 初始化 Creem - 支持多种配置字段名
-    if (this.config.creemApiKey || this.config.CREEM_API_KEY) {
+    const creemKey = this.config.creemApiKey || this.config.CREEM_API_KEY
+
+    // 临时：为了测试支付功能，即使没有真实配置也初始化 Creem
+    // 在生产环境中，应该移除这个临时配置
+    const useTestMode = process.env.NODE_ENV === 'development' || (!creemKey || creemKey.trim() === '')
+
+    if ((creemKey && creemKey.trim() !== '') || useTestMode) {
       this.providers.creem = {
         name: 'Creem',
         sdk: 'creem',
         currency: ['USD', 'EUR', 'GBP'],
         supportedTypes: [PAYMENT_TYPES.ONE_TIME, PAYMENT_TYPES.SUBSCRIPTION],
-        environment: process.env.NODE_ENV === 'production' ? 'live' : 'sandbox'
+        environment: useTestMode ? 'test' : (process.env.NODE_ENV === 'production' ? 'live' : 'sandbox')
       }
     }
 

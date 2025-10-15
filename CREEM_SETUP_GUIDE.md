@@ -19,7 +19,7 @@
 ```bash
 # 复制环境变量模板
 cp .env.example .env.local
-
+  
 # 编辑配置文件
 # CREEM_API_KEY=ck_live_xxxxxxxxxxxxxxxxxxxxx
 # CREEM_SECRET_KEY=sk_live_xxxxxxxxxxxxxxxxxxxxx

@@ -74,6 +74,11 @@
         </footer>
       </template>
     </ClientOnly>
+
+    <!-- 支付模态框 -->
+    <ClientOnly>
+      <PaymentModal />
+    </ClientOnly>
   </div>
 </template>
 

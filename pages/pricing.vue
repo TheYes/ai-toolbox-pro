@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-50">
     <!-- 导航栏 -->
-    <AppHeader />
+    <!-- <AppHeader /> -->
 
     <!-- 主要内容 -->
     <main>
@@ -15,7 +15,7 @@
     </main>
 
     <!-- 页脚 -->
-    <AppFooter />
+    <!-- <AppFooter /> -->
   </div>
 </template>
 
