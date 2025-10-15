@@ -22,7 +22,9 @@
     "auto-fix": "node smart-deploy.js --fix-only",
     "full-check": "node smart-deploy.js --full-check",
     "quick-fix": "node quick-fix.js",
-    "quick-deploy": "node quick-deploy.js"
+    "quick-deploy": "node quick-deploy.js",
+    "check-config": "node scripts/check-config.js",
+    "test-payment": "node test-payment.cjs"
   },
   "devDependencies": {
     "@nuxt/devtools": "^1.3.0",
