@@ -188,7 +188,7 @@ export const usePaymentStore = defineStore('payment', {
     // 获取订阅状态
     async fetchSubscriptionStatus() {
       try {
-        const response = await $fetch('/api/pay/subscription/status')
+        const response = await $fetch('/api/subscription/status')
         this.subscription = response.subscription
       } catch (error) {
         console.error('获取订阅状态失败:', error)
@@ -210,7 +210,7 @@ export const usePaymentStore = defineStore('payment', {
       this.isLoading = true
 
       try {
-        await $fetch('/api/pay/subscription/cancel', {
+        await $fetch('/api/subscription/cancel', {
           method: 'POST'
         })
 
@@ -233,7 +233,7 @@ export const usePaymentStore = defineStore('payment', {
       this.isLoading = true
 
       try {
-        await $fetch('/api/pay/subscription/resume', {
+        await $fetch('/api/subscription/resume', {
           method: 'POST'
         })
 

@@ -59,7 +59,15 @@ export const usePayment = () => {
    * 显示订阅支付弹窗
    */
   const showSubscriptionPayment = (planId) => {
-    const plan = pricingPlans[planId]
+    // 根据 planId 查找对应的计划
+    let plan = null
+    for (const key in pricingPlans) {
+      if (pricingPlans[key].id === planId) {
+        plan = pricingPlans[key]
+        break
+      }
+    }
+
     if (!plan) {
       console.error('未找到订阅计划:', planId)
       return

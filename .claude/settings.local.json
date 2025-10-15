@@ -100,7 +100,16 @@
       "Bash(curl -v http://localhost:3004/api/pay/create -X POST -H \"Content-Type: application/json\" -d '{\"\"amount\"\": 0.01, \"\"currency\"\": \"\"USD\"\", \"\"description\"\": \"\"测试Creem支付\"\", \"\"type\"\": \"\"one_time\"\", \"\"paymentMethod\"\": \"\"creem\"\", \"\"successUrl\"\": \"\"http://localhost:3004/success\"\", \"\"cancelUrl\"\": \"\"http://localhost:3004/cancel\"\"}')",
       "Bash(timeout 15 npm run dev)",
       "Bash(curl -s http://localhost:3004/pricing)",
-      "Bash(node test-payment-creem.js)"
+      "Bash(node test-payment-creem.js)",
+      "Bash(git commit -m \"$(cat <<''EOF''\n完成定价页面支付功能集成并修复 Creem 支付系统\n\n## 主要更新\n- ✅ 完成 pricing.vue 页面的支付功能集成\n- ✅ 修复 Creem 支付系统配置问题，支持测试模式\n- ✅ 添加 PaymentModal 组件到 default.vue 布局\n- ✅ 修复 payment store 中的 showSubscriptionPayment 方法\n- ✅ 更新 CREEM_SETUP_GUIDE.md 文档\n\n## 技术改进\n- 修复通用支付模块中的配置检查逻辑\n- 添加开发环境下的测试模式支持\n- 移除调试代码，保持代码整洁\n- 验证支付 API 端点正常工作\n\n## 测试验证\n- ✅ Creem 支付创建 API 测试通过\n- ✅ 支付数据结构验证正确\n- ✅ 支付记录保存功能正常\n- ✅ 定价页面支付组件集成完成\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(curl -s \"http://localhost:3000/zh/pricing\")",
+      "Bash(curl -s http://localhost:3002/)",
+      "Bash(curl -s http://localhost:3002/pricing)",
+      "Bash(curl -s --connect-timeout 5 http://localhost:3002/)",
+      "Bash(curl -s -X POST \"http://localhost:3002/api/pay/create\" -H \"Content-Type: application/json\" -d '{\"\"\"\"amount\"\"\"\": 0.01, \"\"\"\"currency\"\"\"\": \"\"\"\"USD\"\"\"\", \"\"\"\"description\"\"\"\": \"\"\"\"test\"\"\"\", \"\"\"\"type\"\"\"\": \"\"\"\"one_time\"\"\"\", \"\"\"\"paymentMethod\"\"\"\": \"\"\"\"creem\"\"\"\", \"\"\"\"successUrl\"\"\"\": \"\"\"\"http://localhost:3002/success\"\"\"\", \"\"\"\"cancelUrl\"\"\"\": \"\"\"\"http://localhost:3002/cancel\"\"\"\"}')",
+      "Bash(curl -v http://localhost:3002/api/pay/create -X POST -H \"Content-Type: application/json\" -d '{\"\"\"\"amount\"\"\"\": 0.01, \"\"\"\"currency\"\"\"\": \"\"\"\"USD\"\"\"\", \"\"\"\"description\"\"\"\": \"\"\"\"test\"\"\"\", \"\"\"\"type\"\"\"\": \"\"\"\"one_time\"\"\"\", \"\"\"\"paymentMethod\"\"\"\": \"\"\"\"creem\"\"\"\", \"\"\"\"successUrl\"\"\"\": \"\"\"\"http://localhost:3002/success\"\"\"\", \"\"\"\"cancelUrl\"\"\"\": \"\"\"\"http://localhost:3002/cancel\"\"\"\"}')",
+      "Bash(curl -v http://localhost:3002/pricing)",
+      "Bash(git add server/api/subscription/cancel.post.js server/api/subscription/resume.post.js)"
     ],
     "deny": [],
     "ask": []

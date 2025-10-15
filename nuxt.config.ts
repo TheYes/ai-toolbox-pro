@@ -20,8 +20,13 @@ export default defineNuxtConfig({
     crossPrefetch: false,
     viewTransition: false,
     watcher: 'parcel',
-    clientNodeCompat: true
+    clientNodeCompat: true,
+    // 禁用组件自动导入中的路径解析问题
+    componentIslands: false
   },
+
+  // 禁用自动组件导入以解决路径问题
+  components: false,
 
   // CSS配置
   css: ['~/assets/css/main.css'],
@@ -47,6 +52,19 @@ export default defineNuxtConfig({
     },
     ssr: {
       noExternal: ['@unhead/vue']
+    },
+    // 修复组件导入路径问题
+    vue: {
+      template: {
+        compilerOptions: {
+          isCustomElement: (tag) => false
+        }
+      }
+    },
+    // 优化构建配置
+    define: {
+      __VUE_OPTIONS_API__: true,
+      __VUE_PROD_DEVTOOLS__: false
     }
   },
 
@@ -89,7 +107,7 @@ export default defineNuxtConfig({
   // 日志配置
   logLevel: 'silent',
 
-  // 国际化配置 - 优化构建时的问题
+  // 国际化配置
   i18n: {
     locales: [
       {
@@ -105,7 +123,7 @@ export default defineNuxtConfig({
     ],
     defaultLocale: 'en',
     langDir: 'locales',
-    lazy: true,
+    lazy: false,
     strategy: 'prefix_except_default',
     detectBrowserLanguage: {
       useCookie: true,
@@ -113,14 +131,7 @@ export default defineNuxtConfig({
       redirectOn: 'root',
       alwaysRedirect: false,
       fallbackLocale: 'en'
-    },
-    // 优化构建配置，避免预渲染时的i18n错误
-    compilation: {
-      strictMessage: false,
-      escapeHtml: false
-    },
-    // 简化页面配置，避免构建时的上下文问题
-    customRoutes: 'config'
+    }
   },
 
   // 运行时配置

@@ -4,7 +4,8 @@
   "description": "AI驱动的在线小工具集合网站",
   "author": "xiaoxin",
   "private": true,
-  
+  "type": "module",
+
   "engines": {
     "node": ">=20.19.0"
   },

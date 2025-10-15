@@ -137,5 +137,47 @@
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
     "allRightsReserved": "All rights reserved."
+  },
+  "pricing": {
+    "title": "Choose Your Perfect Plan",
+    "description": "Select the perfect pricing plan for your needs. Unlock all premium features with our affordable subscription plans.",
+    "mostPopular": "Most Popular",
+    "plans": {
+      "monthly": {
+        "name": "Pro Monthly",
+        "price": "$9.99/month",
+        "features": [
+          "Unlimited access to all tools",
+          "Priority customer support",
+          "Cloud sync settings",
+          "Ad-free experience"
+        ],
+        "button": "Choose Monthly"
+      },
+      "yearly": {
+        "name": "Pro Yearly",
+        "price": "$79.99/year",
+        "features": [
+          "Unlimited access to all tools",
+          "Priority customer support",
+          "Cloud sync settings",
+          "Ad-free experience",
+          "Save 33% annually"
+        ],
+        "button": "Choose Yearly"
+      },
+      "lifetime": {
+        "name": "Pro Lifetime",
+        "price": "$299.99/once",
+        "features": [
+          "Lifetime unlimited access",
+          "All future feature updates",
+          "Priority customer support",
+          "Cloud sync settings",
+          "Permanent ad removal"
+        ],
+        "button": "Choose Lifetime"
+      }
+    }
   }
 }
