@@ -79,16 +79,16 @@ export default defineNuxtConfig({
     },
     // 禁用内置的存储功能
     storage: {},
-    // 优化渲染 - 添加更多路由预渲染
+    // 简化预渲染路由，避免i18n构建错误
     prerender: {
-      routes: ['/', '/zh', '/tools', '/zh/tools', '/pricing', '/zh/pricing']
+      routes: ['/']
     }
   },
 
   // 日志配置
   logLevel: 'silent',
 
-  // 国际化配置
+  // 国际化配置 - 优化构建时的问题
   i18n: {
     locales: [
       {
@@ -112,7 +112,14 @@ export default defineNuxtConfig({
       redirectOn: 'root',
       alwaysRedirect: false,
       fallbackLocale: 'en'
-    }
+    },
+    // 优化构建配置，避免预渲染时的i18n错误
+    compilation: {
+      strictMessage: false,
+      escapeHtml: false
+    },
+    // 简化页面配置，避免构建时的上下文问题
+    customRoutes: 'config'
   },
 
   // 运行时配置
