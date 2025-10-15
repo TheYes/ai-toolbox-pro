@@ -5,7 +5,13 @@
     </NuxtLayout>
 
     <!-- 支付模态框 -->
-    <PaymentModal />
+    <ClientOnly>
+      <PaymentModal />
+      <!-- SSR fallback -->
+      <template #fallback>
+        <!-- Empty fallback to prevent hydration mismatch -->
+      </template>
+    </ClientOnly>
 
     <!-- 全局通知 -->
     <div v-if="notificationStore.isVisible"
@@ -41,6 +47,7 @@
 
 <script setup>
 import { computed } from 'vue'
+import PaymentModal from '~/components/payment/PaymentModal.vue'
 
 // 设置页面标题和元数据
 useHead({

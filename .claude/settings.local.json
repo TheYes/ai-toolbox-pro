@@ -109,7 +109,13 @@
       "Bash(curl -s -X POST \"http://localhost:3002/api/pay/create\" -H \"Content-Type: application/json\" -d '{\"\"\"\"amount\"\"\"\": 0.01, \"\"\"\"currency\"\"\"\": \"\"\"\"USD\"\"\"\", \"\"\"\"description\"\"\"\": \"\"\"\"test\"\"\"\", \"\"\"\"type\"\"\"\": \"\"\"\"one_time\"\"\"\", \"\"\"\"paymentMethod\"\"\"\": \"\"\"\"creem\"\"\"\", \"\"\"\"successUrl\"\"\"\": \"\"\"\"http://localhost:3002/success\"\"\"\", \"\"\"\"cancelUrl\"\"\"\": \"\"\"\"http://localhost:3002/cancel\"\"\"\"}')",
       "Bash(curl -v http://localhost:3002/api/pay/create -X POST -H \"Content-Type: application/json\" -d '{\"\"\"\"amount\"\"\"\": 0.01, \"\"\"\"currency\"\"\"\": \"\"\"\"USD\"\"\"\", \"\"\"\"description\"\"\"\": \"\"\"\"test\"\"\"\", \"\"\"\"type\"\"\"\": \"\"\"\"one_time\"\"\"\", \"\"\"\"paymentMethod\"\"\"\": \"\"\"\"creem\"\"\"\", \"\"\"\"successUrl\"\"\"\": \"\"\"\"http://localhost:3002/success\"\"\"\", \"\"\"\"cancelUrl\"\"\"\": \"\"\"\"http://localhost:3002/cancel\"\"\"\"}')",
       "Bash(curl -v http://localhost:3002/pricing)",
-      "Bash(git add server/api/subscription/cancel.post.js server/api/subscription/resume.post.js)"
+      "Bash(git add server/api/subscription/cancel.post.js server/api/subscription/resume.post.js)",
+      "Bash(git commit -m \"$(cat <<''EOF''\n完成项目修复和功能优化\n\n## 主要修复\n- ✅ 修复定价页面 500 错误，更新组件导入和 usePayment 集成\n- ✅ 添加订阅管理 API 端点（取消/恢复订阅）\n- ✅ 优化 Nuxt 配置，解决组件导入路径问题\n- ✅ 更新 package.json 添加 module 类型支持\n- ✅ 完善支付系统和多语言支持\n\n## 技术改进\n- 修复 pricing.vue 中的重复声明和导入问题\n- 增强通用支付模块的配置和验证\n- 添加详细的订阅状态管理功能\n- 优化开发环境的错误处理和构建配置\n\n## 新增功能\n- 订阅取消和恢复 API (server/api/subscription/)\n- 完整的支付记录和历史管理\n- 增强的多语言价格显示\n- 改进的支付方式集成\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(curl --connect-timeout 3 http://localhost:3002/)",
+      "Bash(/dev/null)",
+      "Bash(curl -s http://localhost:3001/)",
+      "Bash(curl -s http://localhost:3001/pricing)",
+      "Bash(curl --connect-timeout 5 http://localhost:3001/)"
     ],
     "deny": [],
     "ask": []

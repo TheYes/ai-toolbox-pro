@@ -83,6 +83,11 @@
 </template>
 
 <script setup>
+// 手动导入组件（因为禁用了自动导入）
+import AppHeader from '~/components/AppHeader.vue'
+import AppFooter from '~/components/AppFooter.vue'
+import PaymentModal from '~/components/payment/PaymentModal.vue'
+
 // SEO设置
 useHead({
   htmlAttrs: {

@@ -141,6 +141,7 @@
 
 <script setup>
 import { computed, ref } from 'vue'
+import PriceCard from '~/components/payment/PriceCard.vue'
 
 const paymentStore = usePaymentStore()
 const { pricingPlans } = usePayment()
