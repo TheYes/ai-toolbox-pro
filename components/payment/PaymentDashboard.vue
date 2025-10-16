@@ -81,7 +81,7 @@
               class="flex justify-between items-start space-x-3 p-3 bg-gray-50 rounded-lg"
             >
               <span class="text-sm font-medium text-gray-900">{{ formatDate(item.startedAt) }}</span>
-              <span class="text-sm text-gray-600">{{ formatDate(item.endedAt || item.startedAt }}</span>
+              <span class="text-sm text-gray-600">{{ formatDate(item.endedAt || item.startedAt) }}</span>
               <span class="text-sm"
                     :class="{
                       'text-green-600': item.status === 'active',

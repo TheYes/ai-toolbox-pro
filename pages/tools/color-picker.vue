@@ -1,196 +1,169 @@
 <template>
-  <div class="tool-container">
+  <div class="min-h-screen">
     <!-- 工具头部 -->
-    <div class="tool-header">
-      <NuxtLink :to="getLocalizedPath('/tools')" class="text-primary-600 hover:text-primary-700 mb-4 inline-block">
-        ← Back to Tools
-      </NuxtLink>
-      <h1 class="tool-title">{{ $t('tools.colorPicker.name') }}</h1>
-      <p class="tool-description">{{ $t('tools.colorPicker.description') }}</p>
+    <div class="bg-gradient-to-br from-primary-50 to-secondary-50 py-16">
+      <div class="container mx-auto px-6">
+        <NuxtLink
+          :to="getLocalizedPath('/tools')"
+          class="text-primary-600 hover:text-primary-700 mb-4 inline-block"
+        >
+          ← {{ t('common.backToTools') }}
+        </NuxtLink>
+        <h1 class="text-4xl font-bold text-gray-900 mb-4 text-center">{{ t('tools.colorPicker.name') }}</h1>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto text-center">{{ t('tools.colorPicker.description') }}</p>
+      </div>
     </div>
 
-    <div class="tool-content">
-      <!-- 颜色选择器 -->
-      <div class="card">
-        <h2 class="text-xl font-semibold mb-4">Color Picker</h2>
-        <div class="grid md:grid-cols-2 gap-6">
-          <!-- 可视化选择器 -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              Visual Color Picker
-            </label>
-            <div class="space-y-4">
+    <!-- 工具内容 -->
+    <div class="container mx-auto px-6 py-16">
+      <div class="tool-content">
+        <!-- 颜色输入区域 -->
+        <div class="card">
+          <h3 class="text-lg font-semibold mb-4">{{ t('tools.colorPicker.inputColor') }}</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- HEX输入 -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">HEX</label>
               <input
                 v-model="hexColor"
-                type="color"
-                class="w-full h-32 rounded cursor-pointer"
+                type="text"
+                placeholder="#000000"
+                class="input-field"
                 @input="updateFromHex"
               />
-              <div class="flex items-center space-x-2">
-                <input
-                  v-model="hexColor"
-                  type="text"
-                  placeholder="#000000"
-                  class="input-field"
-                  @input="updateFromHex"
-                />
-                <div
-                  class="w-12 h-12 rounded border-2 border-gray-300"
-                  :style="{ backgroundColor: hexColor }"
-                ></div>
-              </div>
             </div>
-          </div>
 
-          <!-- RGB滑块 -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              RGB Values
-            </label>
-            <div class="space-y-3">
-              <div>
-                <label class="text-xs text-gray-600">Red: {{ rgbValues.r }}</label>
+            <!-- RGB输入 -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">RGB</label>
+              <div class="flex space-x-2">
                 <input
-                  v-model.number="rgbValues.r"
-                  type="range"
+                  v-model="rgbValues.r"
+                  type="number"
                   min="0"
                   max="255"
-                  class="w-full"
+                  class="input-field flex-1"
                   @input="updateFromRgb"
                 />
-              </div>
-              <div>
-                <label class="text-xs text-gray-600">Green: {{ rgbValues.g }}</label>
                 <input
-                  v-model.number="rgbValues.g"
-                  type="range"
+                  v-model="rgbValues.g"
+                  type="number"
                   min="0"
                   max="255"
-                  class="w-full"
+                  class="input-field flex-1"
                   @input="updateFromRgb"
                 />
-              </div>
-              <div>
-                <label class="text-xs text-gray-600">Blue: {{ rgbValues.b }}</label>
                 <input
-                  v-model.number="rgbValues.b"
-                  type="range"
+                  v-model="rgbValues.b"
+                  type="number"
                   min="0"
                   max="255"
-                  class="w-full"
+                  class="input-field flex-1"
                   @input="updateFromRgb"
                 />
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <!-- 颜色格式输出 -->
-      <div class="card">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-semibold">Color Formats</h2>
-          <button @click="copyAllFormats" class="btn-secondary text-sm px-3 py-1">
-            Copy All
-          </button>
+          <!-- 颜色预览 -->
+          <div class="mt-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">{{ t('tools.colorPicker.preview') }}</label>
+            <div
+              class="w-full h-24 rounded-lg border-2 border-gray-300"
+              :style="{ backgroundColor: hexColor }"
+            ></div>
+          </div>
         </div>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <!-- HEX -->
-          <div class="color-format">
-            <label class="text-sm font-medium text-gray-700">HEX</label>
-            <div class="flex items-center space-x-2">
-              <input
-                :value="hexColor"
-                readonly
-                class="input-field text-sm"
-              />
-              <button @click="copyFormat(hexColor)" class="btn-secondary text-xs px-2 py-1">
-                {{ $t('common.copy') }}
+        <!-- 预设颜色 -->
+        <div class="card">
+          <h3 class="text-lg font-semibold mb-4">{{ t('tools.colorPicker.presetColors') }}</h3>
+          <div class="grid grid-cols-8 md:grid-cols-16 gap-2">
+            <button
+              v-for="color in presetColors"
+              :key="color"
+              @click="selectPresetColor(color)"
+              class="w-8 h-8 rounded border border-gray-300 hover:scale-110 transition-transform"
+              :style="{ backgroundColor: color }"
+              :title="color"
+            ></button>
+          </div>
+        </div>
+
+        <!-- 颜色格式输出 -->
+        <div class="card">
+          <h3 class="text-lg font-semibold mb-4">{{ t('tools.colorPicker.colorFormats') }}</h3>
+          <div class="space-y-3">
+            <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+              <code class="font-mono text-sm">HEX: {{ hexColor }}</code>
+              <button
+                @click="copyFormat(hexColor)"
+                class="btn-secondary text-sm px-3 py-1"
+              >
+                {{ t('common.copy') }}
+              </button>
+            </div>
+            <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+              <code class="font-mono text-sm">RGB: {{ rgbString }}</code>
+              <button
+                @click="copyFormat(rgbString)"
+                class="btn-secondary text-sm px-3 py-1"
+              >
+                {{ t('common.copy') }}
+              </button>
+            </div>
+            <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+              <code class="font-mono text-sm">RGBA: {{ rgbaString }}</code>
+              <button
+                @click="copyFormat(rgbaString)"
+                class="btn-secondary text-sm px-3 py-1"
+              >
+                {{ t('common.copy') }}
+              </button>
+            </div>
+            <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+              <code class="font-mono text-sm">HSL: {{ hslString }}</code>
+              <button
+                @click="copyFormat(hslString)"
+                class="btn-secondary text-sm px-3 py-1"
+              >
+                {{ t('common.copy') }}
               </button>
             </div>
           </div>
 
-          <!-- RGB -->
-          <div class="color-format">
-            <label class="text-sm font-medium text-gray-700">RGB</label>
-            <div class="flex items-center space-x-2">
-              <input
-                :value="rgbString"
-                readonly
-                class="input-field text-sm"
-              />
-              <button @click="copyFormat(rgbString)" class="btn-secondary text-xs px-2 py-1">
-                {{ $t('common.copy') }}
-              </button>
-            </div>
-          </div>
-
-          <!-- RGBA -->
-          <div class="color-format">
-            <label class="text-sm font-medium text-gray-700">RGBA</label>
-            <div class="flex items-center space-x-2">
-              <input
-                :value="rgbaString"
-                readonly
-                class="input-field text-sm"
-              />
-              <button @click="copyFormat(rgbaString)" class="btn-secondary text-xs px-2 py-1">
-                {{ $t('common.copy') }}
-              </button>
-            </div>
-          </div>
-
-          <!-- HSL -->
-          <div class="color-format">
-            <label class="text-sm font-medium text-gray-700">HSL</label>
-            <div class="flex items-center space-x-2">
-              <input
-                :value="hslString"
-                readonly
-                class="input-field text-sm"
-              />
-              <button @click="copyFormat(hslString)" class="btn-secondary text-xs px-2 py-1">
-                {{ $t('common.copy') }}
-              </button>
-            </div>
+          <div class="mt-4">
+            <button
+              @click="copyAllFormats"
+              class="btn-primary w-full"
+            >
+              {{ t('tools.colorPicker.copyAllFormats') }}
+            </button>
           </div>
         </div>
-      </div>
 
-      <!-- 预设颜色 -->
-      <div class="card">
-        <h2 class="text-xl font-semibold mb-4">Preset Colors</h2>
-        <div class="grid grid-cols-8 md:grid-cols-12 gap-2">
-          <div
-            v-for="color in presetColors"
-            :key="color"
-            class="preset-color"
-            :style="{ backgroundColor: color }"
-            @click="selectPresetColor(color)"
-            :title="color"
-          ></div>
+        <!-- 状态信息 -->
+        <div
+          v-if="statusMessage"
+          class="text-center p-4 rounded-md"
+          :class="statusClass"
+        >
+          {{ statusMessage }}
         </div>
-      </div>
 
-      <!-- 状态信息 -->
-      <div v-if="statusMessage" class="p-4 rounded-md text-center" :class="statusClass">
-        {{ statusMessage }}
-      </div>
-
-      <!-- 功能说明 -->
-      <div class="card bg-blue-50 border-blue-200">
-        <h3 class="text-lg font-semibold mb-3 text-blue-900">
-          Features:
-        </h3>
-        <ul class="space-y-2 text-blue-800">
-          <li>✅ Visual color picker with live preview</li>
-          <li>✅ RGB sliders for precise control</li>
-          <li>✅ Multiple color format support</li>
-          <li>✅ Copy individual formats or all at once</li>
-          <li>✅ Preset color palette</li>
-          <li>✅ Alpha transparency support</li>
-        </ul>
+        <!-- 工具信息 -->
+        <div class="card bg-blue-50 border-blue-200">
+          <h3 class="text-lg font-semibold mb-3 text-blue-900">
+            {{ t('tools.colorPicker.features.title') }}
+          </h3>
+          <ul class="space-y-2 text-blue-800">
+            <li>✅ {{ t('tools.colorPicker.features.pickColor') }}</li>
+            <li>✅ {{ t('tools.colorPicker.features.multipleFormats') }}</li>
+            <li>✅ {{ t('tools.colorPicker.features.presetColors') }}</li>
+            <li>✅ {{ t('tools.colorPicker.features.realTime') }}</li>
+            <li>✅ {{ t('tools.colorPicker.features.copyAll') }}</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -204,9 +177,7 @@ const { t } = useI18n()
 // SEO设置
 useHead({
   title: 'Color Picker',
-  meta: [
-    { name: 'description', content: 'Pick colors and get different format codes' }
-  ]
+  meta: [{ name: 'description', content: 'Pick colors and get different format codes' }]
 })
 
 // 工具函数
@@ -221,10 +192,38 @@ const statusType = ref('')
 
 // 预设颜色
 const presetColors = [
-  '#000000', '#FFFFFF', '#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF',
-  '#800000', '#008000', '#000080', '#808000', '#800080', '#008080', '#C0C0C0', '#808080',
-  '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F',
-  '#BB8FCE', '#85C1E2', '#F8B739', '#52D726', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4'
+  '#000000',
+  '#FFFFFF',
+  '#FF0000',
+  '#00FF00',
+  '#0000FF',
+  '#FFFF00',
+  '#FF00FF',
+  '#00FFFF',
+  '#800000',
+  '#008000',
+  '#000080',
+  '#808000',
+  '#800080',
+  '#008080',
+  '#C0C0C0',
+  '#808080',
+  '#FF6B6B',
+  '#4ECDC4',
+  '#45B7D1',
+  '#96CEB4',
+  '#FFEAA7',
+  '#DDA0DD',
+  '#98D8C8',
+  '#F7DC6F',
+  '#BB8FCE',
+  '#85C1E2',
+  '#F8B739',
+  '#52D726',
+  '#FF6B6B',
+  '#4ECDC4',
+  '#45B7D1',
+  '#96CEB4'
 ]
 
 // 计算属性
@@ -263,10 +262,14 @@ const updateFromHex = () => {
 // 从RGB更新
 const updateFromRgb = () => {
   const { r, g, b } = rgbValues.value
-  hexColor.value = '#' + [r, g, b].map(x => {
-    const hex = x.toString(16)
-    return hex.length === 1 ? '0' + hex : hex
-  }).join('')
+  hexColor.value =
+    '#' +
+    [r, g, b]
+      .map((x) => {
+        const hex = x.toString(16)
+        return hex.length === 1 ? '0' + hex : hex
+      })
+      .join('')
 }
 
 // RGB到HSL转换
@@ -277,7 +280,9 @@ const rgbToHsl = (r, g, b) => {
 
   const max = Math.max(r, g, b)
   const min = Math.min(r, g, b)
-  let h, s, l = (max + min) / 2
+  let h,
+    s,
+    l = (max + min) / 2
 
   if (max === min) {
     h = s = 0
@@ -286,9 +291,15 @@ const rgbToHsl = (r, g, b) => {
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
 
     switch (max) {
-      case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break
-      case g: h = ((b - r) / d + 2) / 6; break
-      case b: h = ((r - g) / d + 4) / 6; break
+      case r:
+        h = ((g - b) / d + (g < b ? 6 : 0)) / 6
+        break
+      case g:
+        h = ((b - r) / d + 2) / 6
+        break
+      case b:
+        h = ((r - g) / d + 4) / 6
+        break
     }
   }
 
@@ -334,24 +345,6 @@ updateFromHex()
 </script>
 
 <style scoped>
-.tool-container {
-  max-width: 4xl;
-  margin: 0 auto;
-  padding: 1rem;
-}
-
-.tool-header {
-  margin-bottom: 2rem;
-}
-
-.tool-title {
-  @apply text-3xl font-bold text-gray-900 mb-2;
-}
-
-.tool-description {
-  @apply text-gray-600;
-}
-
 .tool-content {
   @apply space-y-6;
 }
@@ -362,14 +355,6 @@ updateFromHex()
 
 .input-field {
   @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
-}
-
-.color-format {
-  @apply space-y-2;
-}
-
-.preset-color {
-  @apply w-8 h-8 rounded cursor-pointer border-2 border-gray-300 hover:border-gray-400 transition-colors;
 }
 
 .btn-primary {

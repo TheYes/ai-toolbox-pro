@@ -5,7 +5,7 @@
         <div class="payment-modal" @click.stop>
           <!-- 模态框头部 -->
           <div class="payment-modal__header">
-            <h2 class="payment-modal__title">选择支付方式</h2>
+            <h2 class="payment-modal__title">{{ t('payment.selectPaymentMethod') }}</h2>
             <button @click="handleClose" class="payment-modal__close">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -16,18 +16,18 @@
           <!-- 支付信息摘要 -->
           <div class="payment-modal__summary">
             <div class="payment-modal__summary-item">
-              <span class="payment-modal__summary-label">商品:</span>
+              <span class="payment-modal__summary-label">{{ t('payment.product') }}:</span>
               <span class="payment-modal__summary-value">{{ paymentStore.currentPayment.description }}</span>
             </div>
             <div class="payment-modal__summary-item">
-              <span class="payment-modal__summary-label">金额:</span>
+              <span class="payment-modal__summary-label">{{ t('payment.amount') }}:</span>
               <span class="payment-modal__summary-value payment-modal__summary-value--price">
                 {{ formatPrice(paymentStore.currentPayment.amount, paymentStore.currentPayment.currency) }}
               </span>
             </div>
             <div v-if="paymentStore.currentPayment.type === 'subscription'" class="payment-modal__summary-item">
-              <span class="payment-modal__summary-label">类型:</span>
-              <span class="payment-modal__summary-value">订阅</span>
+              <span class="payment-modal__summary-label">{{ t('payment.type') }}:</span>
+              <span class="payment-modal__summary-value">{{ t('payment.subscription') }}</span>
             </div>
           </div>
 
@@ -49,7 +49,7 @@
 
           <!-- 支付方式选择 -->
           <div class="payment-modal__methods">
-            <h3 class="payment-modal__methods-title">选择支付方式</h3>
+            <h3 class="payment-modal__methods-title">{{ t('payment.selectPaymentMethod') }}</h3>
 
             <!-- Creem 支付 -->
             <div
@@ -64,10 +64,10 @@
                 <div class="payment-method__header">
                   <span class="payment-method__icon">💳</span>
                   <span class="payment-method__name">Creem</span>
-                  <span class="payment-method__badge">推荐</span>
+                  <span class="payment-method__badge">{{ t('payment.recommended') }}</span>
                 </div>
                 <p class="payment-method__description">
-                  快速、安全的支付方式，支持信用卡、借记卡等多种支付方式
+                  {{ t('payment.creemDescription') }}
                 </p>
               </div>
             </div>
@@ -87,7 +87,7 @@
                   <span class="payment-method__name">PayPal</span>
                 </div>
                 <p class="payment-method__description">
-                  全球领先的数字支付平台，安全可靠的支付保障
+                  {{ t('payment.paypalDescription') }}
                 </p>
               </div>
             </div>
@@ -111,7 +111,7 @@
               :disabled="paymentStore.isLoading"
               class="payment-modal__button payment-modal__button--secondary"
             >
-              取消
+              {{ t('common.cancel') }}
             </button>
           </div>
 
@@ -120,7 +120,7 @@
             <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
             </svg>
-            <span>安全加密支付 | SSL证书保护 | 符合PCI DSS标准</span>
+            <span>{{ t('payment.securityText') }}</span>
           </div>
         </div>
       </div>
@@ -131,6 +131,7 @@
 <script setup>
 import { computed } from 'vue'
 
+const { t } = useI18n()
 const paymentStore = usePaymentStore()
 
 // 计算属性
@@ -171,11 +172,11 @@ const getPaymentButtonText = () => {
 
   switch (method) {
     case 'creem':
-      return `使用 Creem 支付 ${formatPrice(amount, currency)}`
+      return `${t('payment.payWith')} Creem ${formatPrice(amount, currency)}`
     case 'paypal':
-      return `使用 PayPal 支付 ${formatPrice(amount, currency)}`
+      return `${t('payment.payWith')} PayPal ${formatPrice(amount, currency)}`
     default:
-      return `支付 ${formatPrice(amount, currency)}`
+      return `${t('payment.pay')} ${formatPrice(amount, currency)}`
   }
 }
 

@@ -1,108 +1,139 @@
 <template>
-  <div class="tool-container">
+  <div class="min-h-screen">
     <!-- 工具头部 -->
-    <div class="tool-header">
-      <NuxtLink :to="getLocalizedPath('/tools')" class="text-primary-600 hover:text-primary-700 mb-4 inline-block">
-        ← Back to Tools
-      </NuxtLink>
-      <h1 class="tool-title">{{ t('tools.urlEncoder.name') }}</h1>
-      <p class="tool-description">{{ t('tools.urlEncoder.description') }}</p>
+    <div class="bg-gradient-to-br from-primary-50 to-secondary-50 py-16">
+      <div class="container mx-auto px-6">
+        <NuxtLink
+          :to="getLocalizedPath('/tools')"
+          class="text-primary-600 hover:text-primary-700 mb-4 inline-block"
+        >
+          ← {{ t('common.backToTools') }}
+        </NuxtLink>
+        <h1 class="text-4xl font-bold text-gray-900 mb-4 text-center">{{ t('tools.urlEncoder.name') }}</h1>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto text-center">{{ t('tools.urlEncoder.description') }}</p>
+      </div>
     </div>
 
-    <div class="tool-content">
-      <!-- 操作模式选择 -->
-      <div class="card">
-        <h2 class="text-xl font-semibold mb-4">{{ t('tools.urlEncoder.operationMode') }}</h2>
-        <div class="flex space-x-4 mb-6">
-          <label class="flex items-center">
-            <input
-              v-model="operationMode"
-              type="radio"
-              value="encode"
-              class="mr-2"
-              @change="processUrl"
-            />
-            <span>{{ t('tools.urlEncoder.encode') }}</span>
-          </label>
-          <label class="flex items-center">
-            <input
-              v-model="operationMode"
-              type="radio"
-              value="decode"
-              class="mr-2"
-              @change="processUrl"
-            />
-            <span>{{ t('tools.urlEncoder.decode') }}</span>
-          </label>
-        </div>
-      </div>
-
-      <!-- 输入区域 -->
-      <div class="card">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-semibold">{{ t('common.input') }}</h2>
-          <div class="space-x-2">
-            <button @click="clearInput" class="btn-secondary text-sm px-3 py-1">
-              {{ t('common.clear') }}
+    <!-- 工具内容 -->
+    <div class="container mx-auto px-6 py-16">
+      <div class="tool-content">
+        <!-- 操作模式选择 -->
+        <div class="card mb-6">
+          <div class="flex flex-wrap gap-4 justify-center">
+            <button
+              @click="operationMode = 'encode'"
+              :class="operationMode === 'encode' ? 'btn-primary' : 'btn-secondary'"
+            >
+              {{ t('tools.urlEncoder.encode') }}
             </button>
-            <button @click="loadExample" class="btn-secondary text-sm px-3 py-1">
-              {{ t('common.example') }}
+            <button
+              @click="operationMode = 'decode'"
+              :class="operationMode === 'decode' ? 'btn-primary' : 'btn-secondary'"
+            >
+              {{ t('tools.urlEncoder.decode') }}
             </button>
           </div>
         </div>
-        <textarea
-          v-model="inputText"
-          :placeholder="operationMode === 'encode' ? t('tools.urlEncoder.encodePlaceholder') : t('tools.urlEncoder.decodePlaceholder')"
-          class="input-field min-h-[120px]"
-          @input="processUrl"
-        ></textarea>
-        <div class="mt-2 text-sm text-gray-600">
-          {{ t('common.length') }}: {{ inputText.length }} {{ t('common.characters') }}
-        </div>
-      </div>
 
-      <!-- 输出区域 -->
-      <div class="card">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-semibold">{{ t('common.output') }}</h2>
-          <div class="space-x-2">
-            <button @click="copyResult" class="btn-secondary text-sm px-3 py-1" :disabled="!outputText">
-              {{ t('common.copy') }}
-            </button>
-            <button @click="downloadResult" class="btn-secondary text-sm px-3 py-1" :disabled="!outputText">
-              {{ t('common.download') }}
-            </button>
+        <!-- 输入区域 -->
+        <div class="card">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold">{{ t('common.input') }}</h2>
+            <div class="space-x-2">
+              <button
+                @click="clearInput"
+                class="btn-secondary text-sm px-3 py-1"
+              >
+                {{ t('common.clear') }}
+              </button>
+              <button
+                @click="loadExample"
+                class="btn-secondary text-sm px-3 py-1"
+              >
+                {{ t('common.example') }}
+              </button>
+            </div>
           </div>
+          <textarea
+            v-model="inputText"
+            :placeholder="operationMode === 'encode' ? t('tools.urlEncoder.encodePlaceholder') : t('tools.urlEncoder.decodePlaceholder')"
+            class="input-field min-h-[200px]"
+            @input="processUrl"
+          ></textarea>
+          <div class="mt-2 text-sm text-gray-600">{{ t('common.length') }}: {{ inputText.length }} {{ t('common.characters') }}</div>
         </div>
-        <textarea
-          v-model="outputText"
-          readonly
-          class="input-field min-h-[120px] bg-gray-50"
-          :placeholder="operationMode === 'encode' ? t('tools.urlEncoder.encodedPlaceholder') : t('tools.urlEncoder.decodedPlaceholder')"
-        ></textarea>
-        <div v-if="outputText" class="mt-2 text-sm text-gray-600">
-          {{ t('common.length') }}: {{ outputText.length }} {{ t('common.characters') }}
+
+        <!-- 操作按钮 -->
+        <div class="flex flex-wrap gap-4 justify-center">
+          <button
+            @click="processUrl"
+            class="btn-primary"
+          >
+            {{ operationMode === 'encode' ? $t('tools.urlEncoder.encode') : $t('tools.urlEncoder.decode') }}
+          </button>
+          <button
+            @click="copyResult"
+            class="btn-secondary"
+          >
+            {{ t('common.copy') }}
+          </button>
+          <button
+            @click="downloadResult"
+            class="btn-secondary"
+          >
+            {{ t('common.download') }}
+          </button>
         </div>
-      </div>
 
-      <!-- 状态信息 -->
-      <div v-if="statusMessage" class="p-4 rounded-md text-center" :class="statusClass">
-        {{ statusMessage }}
-      </div>
+        <!-- 输出区域 -->
+        <div class="card">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold">{{ t('common.output') }}</h2>
+            <div class="space-x-2">
+              <button
+                @click="copyResult"
+                class="btn-secondary text-sm px-3 py-1"
+              >
+                {{ t('common.copy') }}
+              </button>
+              <button
+                @click="downloadResult"
+                class="btn-secondary text-sm px-3 py-1"
+              >
+                {{ t('common.download') }}
+              </button>
+            </div>
+          </div>
+          <textarea
+            v-model="outputText"
+            readonly
+            class="input-field min-h-[200px] bg-gray-50"
+          ></textarea>
+          <div class="mt-2 text-sm text-gray-600">{{ t('common.length') }}: {{ outputText.length }} {{ t('common.characters') }}</div>
+        </div>
 
-      <!-- 功能说明 -->
-      <div class="card bg-blue-50 border-blue-200">
-        <h3 class="text-lg font-semibold mb-3 text-blue-900">
-          {{ t('tools.urlEncoder.features.title') }}
-        </h3>
-        <ul class="space-y-2 text-blue-800">
-          <li>✅ {{ t('tools.urlEncoder.features.encode') }}</li>
-          <li>✅ {{ t('tools.urlEncoder.features.decode') }}</li>
-          <li>✅ {{ t('tools.urlEncoder.features.utf8') }}</li>
-          <li>✅ {{ t('tools.urlEncoder.features.realtime') }}</li>
-          <li>✅ {{ t('tools.urlEncoder.features.copyDownload') }}</li>
-          <li>✅ {{ t('tools.urlEncoder.features.validate') }}</li>
-        </ul>
+        <!-- 状态信息 -->
+        <div
+          v-if="statusMessage"
+          class="text-center p-4 rounded-md"
+          :class="statusClass"
+        >
+          {{ statusMessage }}
+        </div>
+
+        <!-- 工具信息 -->
+        <div class="card bg-blue-50 border-blue-200">
+          <h3 class="text-lg font-semibold mb-3 text-blue-900">
+            {{ t('tools.urlEncoder.features.title') }}
+          </h3>
+          <ul class="space-y-2 text-blue-800">
+            <li>✅ {{ t('tools.urlEncoder.features.encode') }}</li>
+            <li>✅ {{ t('tools.urlEncoder.features.decode') }}</li>
+            <li>✅ {{ t('tools.urlEncoder.features.safe') }}</li>
+            <li>✅ {{ t('tools.urlEncoder.features.quick') }}</li>
+            <li>✅ {{ t('tools.urlEncoder.features.download') }}</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -117,7 +148,10 @@ const { t } = useI18n()
 useHead({
   title: 'URL Encoder/Decoder',
   meta: [
-    { name: 'description', content: 'Encode and decode URLs for safe transmission' }
+    {
+      name: 'description',
+      content: 'Encode and decode URLs for safe transmission'
+    }
   ]
 })
 
@@ -132,11 +166,7 @@ const statusMessage = ref('')
 const statusType = ref('')
 
 // 示例数据
-const exampleUrls = [
-  'https://example.com/search?q=nuxt.js&lang=en',
-  'https://www.google.com/search?q=hello world&filter=images',
-  'https://github.com/user/repo?tab=issues&number=123'
-]
+const exampleUrls = ['https://example.com/search?q=nuxt.js&lang=en', 'https://www.google.com/search?q=hello world&filter=images', 'https://github.com/user/repo?tab=issues&number=123']
 
 // 状态样式
 const statusClass = computed(() => {
@@ -193,6 +223,9 @@ const clearInput = () => {
 
 // 加载示例
 const loadExample = () => {
+  // 确保只在客户端执行以避免 SSR 问题
+  if (!process.client) return
+
   const randomExample = exampleUrls[Math.floor(Math.random() * exampleUrls.length)]
   inputText.value = randomExample
   processUrl()
@@ -210,24 +243,6 @@ const showStatus = (message, type) => {
 </script>
 
 <style scoped>
-.tool-container {
-  max-width: 4xl;
-  margin: 0 auto;
-  padding: 1rem;
-}
-
-.tool-header {
-  margin-bottom: 2rem;
-}
-
-.tool-title {
-  @apply text-3xl font-bold text-gray-900 mb-2;
-}
-
-.tool-description {
-  @apply text-gray-600;
-}
-
 .tool-content {
   @apply space-y-6;
 }

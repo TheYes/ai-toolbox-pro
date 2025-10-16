@@ -2,6 +2,7 @@
   "nav": {
     "home": "Home",
     "tools": "Tools",
+    "pricing": "Pricing",
     "language": "Language"
   },
   "hero": {
@@ -81,10 +82,9 @@
         "title": "Features:",
         "encode": "Encode URLs for safe transmission",
         "decode": "Decode URLs to original format",
-        "utf8": "Support for UTF-8 characters",
-        "realtime": "Real-time encoding/decoding",
-        "copyDownload": "Copy and download results",
-        "validate": "Validate URL format"
+        "safe": "Safe and secure processing",
+        "quick": "Quick conversion",
+        "download": "Download formatted result"
       },
       "encodeSuccess": "URL encoded successfully!",
       "decodeSuccess": "URL decoded successfully!",
@@ -94,18 +94,77 @@
     },
     "qrCode": {
       "name": "QR Code Generator",
-      "description": "Generate QR codes from text or URLs"
+      "description": "Generate QR codes from text or URLs",
+      "placeholder": "Enter text or URL to generate QR code...",
+      "settings": "QR Code Settings",
+      "size": "Size",
+      "errorCorrection": "Error Correction Level",
+      "generate": "Generate QR Code",
+      "result": "Generated QR Code",
+      "features": {
+        "title": "Features:",
+        "generate": "Generate QR codes from text/URLs",
+        "customSize": "Customizable QR code size",
+        "errorCorrection": "Multiple error correction levels",
+        "download": "Download QR code as image",
+        "quick": "Quick generation"
+      }
     },
     "colorPicker": {
       "name": "Color Picker",
-      "description": "Pick colors and get different format codes"
+      "description": "Pick colors and get different format codes",
+      "inputColor": "Input Color",
+      "preview": "Color Preview",
+      "presetColors": "Preset Colors",
+      "colorFormats": "Color Formats",
+      "copyAllFormats": "Copy All Formats",
+      "features": {
+        "title": "Features:",
+        "pickColor": "Pick colors from palette",
+        "multipleFormats": "Multiple color formats (HEX, RGB, HSL)",
+        "presetColors": "Preset color palette",
+        "realTime": "Real-time color conversion",
+        "copyAll": "Copy all formats at once"
+      }
     },
     "passwordGenerator": {
       "name": "Password Generator",
-      "description": "Generate strong and secure passwords"
+      "description": "Generate strong and secure passwords",
+      "settings": "Settings",
+      "length": "Length",
+      "characterTypes": "Character Types",
+      "uppercase": "Uppercase (A-Z)",
+      "lowercase": "Lowercase (a-z)",
+      "numbers": "Numbers (0-9)",
+      "symbols": "Symbols (!{at}#$%^&*)",
+      "generatedPassword": "Generated Password",
+      "strength": "Password Strength",
+      "customize": "Customize password criteria",
+      "clickGenerate": "Click generate to create password",
+      "generate": "Generate Password",
+      "batchGeneration": "Batch Generation",
+      "batchCount": "Batch Count",
+      "generateBatch": "Generate Batch",
+      "checks": {
+        "length": "At least 12 characters",
+        "uppercase": "Contains uppercase letters",
+        "lowercase": "Contains lowercase letters",
+        "numbers": "Contains numbers",
+        "symbols": "Contains symbols",
+        "noCommon": "Not a common password"
+      },
+      "features": {
+        "title": "Features:",
+        "customize": "Customizable password criteria",
+        "strength": "Password strength indicator",
+        "batch": "Batch generation",
+        "secure": "Secure random generation",
+        "quick": "Quick generation"
+      }
     }
   },
   "categories": {
+    "title": "Categories",
     "text": "Text",
     "developer": "Developer",
     "utility": "Utility",
@@ -123,7 +182,10 @@
     "swap": "Swap",
     "backToTools": "← Back to Tools",
     "length": "Length",
-    "characters": "characters"
+    "characters": "characters",
+    "tools": "Tools",
+    "generating": "Generating...",
+    "cancel": "Cancel"
   },
   "footer": {
     "description": "Free online tools for developers and daily use. Simple, fast, and privacy-focused.",
@@ -134,5 +196,43 @@
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
     "allRightsReserved": "All rights reserved."
+  },
+  "pricing": {
+    "title": "Choose Your Perfect Plan",
+    "description": "Select the perfect pricing plan for your needs. Unlock all premium features with our affordable subscription plans.",
+    "mostPopular": "Most Popular",
+    "plans": {
+      "monthly": {
+        "name": "Pro Monthly",
+        "price": "$9.99/month",
+        "features": ["Unlimited access to all tools", "Priority customer support", "Cloud sync settings", "Ad-free experience"],
+        "button": "Choose Monthly"
+      },
+      "yearly": {
+        "name": "Pro Yearly",
+        "price": "$79.99/year",
+        "features": ["Unlimited access to all tools", "Priority customer support", "Cloud sync settings", "Ad-free experience", "Save 33% annually"],
+        "button": "Choose Yearly"
+      },
+      "lifetime": {
+        "name": "Pro Lifetime",
+        "price": "$299.99/once",
+        "features": ["Lifetime unlimited access", "All future feature updates", "Priority customer support", "Cloud sync settings", "Permanent ad removal"],
+        "button": "Choose Lifetime"
+      }
+    }
+  },
+  "payment": {
+    "selectPaymentMethod": "Select Payment Method",
+    "product": "Product",
+    "amount": "Amount",
+    "type": "Type",
+    "subscription": "Subscription",
+    "recommended": "Recommended",
+    "creemDescription": "Fast and secure payment method supporting credit cards, debit cards and multiple payment methods",
+    "paypalDescription": "World's leading digital payment platform with secure and reliable payment protection",
+    "payWith": "Pay with",
+    "pay": "Pay",
+    "securityText": "Secure encrypted payment | SSL certificate protection | PCI DSS compliant"
   }
 }

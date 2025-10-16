@@ -1,96 +1,130 @@
 <template>
-  <div class="tool-container">
+  <div class="min-h-screen">
     <!-- 工具头部 -->
-    <div class="tool-header">
-      <NuxtLink :to="getLocalizedPath('/tools')" class="text-primary-600 hover:text-primary-700 mb-4 inline-block">
-        ← {{ t('common.backToTools') }}
-      </NuxtLink>
-      <h1 class="tool-title">{{ t('tools.jsonFormatter.name') }}</h1>
-      <p class="tool-description">{{ t('tools.jsonFormatter.description') }}</p>
-    </div>
-
-    <div class="tool-content">
-
-      <!-- 输入区域 -->
-      <div class="card">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-semibold">{{ t('common.input') }}</h2>
-          <div class="space-x-2">
-            <button @click="clearInput" class="btn-secondary text-sm px-3 py-1">
-              {{ t('common.clear') }}
-            </button>
-            <button @click="loadExample" class="btn-secondary text-sm px-3 py-1">
-              {{ t('common.example') }}
-            </button>
-          </div>
-        </div>
-        <textarea
-          v-model="inputJson"
-          placeholder='{"name": "John", "age": 30, "city": "New York"}'
-          class="input-field min-h-[200px] font-mono text-sm"
-          @input="formatJson"
-        ></textarea>
-      </div>
-
-      <!-- 操作按钮 -->
-      <div class="flex flex-wrap gap-4 justify-center">
-        <button @click="formatJson" class="btn-primary">
-          {{ t('tools.jsonFormatter.format') }}
-        </button>
-        <button @click="minifyJson" class="btn-secondary">
-          {{ t('tools.jsonFormatter.minify') }}
-        </button>
-        <button @click="validateJson" class="btn-secondary">
-          {{ t('tools.jsonFormatter.validate') }}
-        </button>
-        <button @click="copyResult" class="btn-secondary">
-          {{ t('common.copy') }}
-        </button>
-      </div>
-
-      <!-- 输出区域 -->
-      <div class="card">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-semibold">{{ t('common.output') }}</h2>
-          <div class="space-x-2">
-            <button @click="copyResult" class="btn-secondary text-sm px-3 py-1">
-              {{ t('common.copy') }}
-            </button>
-            <button @click="downloadResult" class="btn-secondary text-sm px-3 py-1">
-              {{ t('common.download') }}
-            </button>
-          </div>
-        </div>
-        <textarea
-          v-model="outputJson"
-          readonly
-          class="input-field min-h-[200px] font-mono text-sm bg-gray-50"
-          :class="{ 'border-red-300': error, 'border-green-300': isValid && !error }"
-        ></textarea>
-      </div>
-
-      <!-- 状态信息 -->
-      <div v-if="statusMessage" class="text-center p-4 rounded-md" :class="statusClass">
-        {{ statusMessage }}
-      </div>
-
-      <!-- 工具信息 -->
-      <div class="card bg-blue-50 border-blue-200">
-        <h3 class="text-lg font-semibold mb-3 text-blue-900">
-          {{ t('tools.jsonFormatter.features.title') }}
-        </h3>
-        <ul class="space-y-2 text-blue-800">
-          <li>✅ {{ t('tools.jsonFormatter.features.format') }}</li>
-          <li>✅ {{ t('tools.jsonFormatter.features.validate') }}</li>
-          <li>✅ {{ t('tools.jsonFormatter.features.minify') }}</li>
-          <li>✅ {{ t('tools.jsonFormatter.features.syntax') }}</li>
-          <li>✅ {{ t('tools.jsonFormatter.features.download') }}</li>
-        </ul>
+    <div class="bg-gradient-to-br from-primary-50 to-secondary-50 py-16">
+      <div class="container mx-auto px-6">
+        <NuxtLink
+          :to="getLocalizedPath('/tools')"
+          class="text-primary-600 hover:text-primary-700 mb-4 inline-block"
+        >
+          ← {{ t('common.backToTools') }}
+        </NuxtLink>
+        <h1 class="text-4xl font-bold text-gray-900 mb-4 text-center">
+          {{ t('tools.jsonFormatter.name') }}
+        </h1>
+        <p class="text-xl text-gray-600 mx-auto text-center">{{ t('tools.jsonFormatter.description') }}</p>
       </div>
     </div>
 
-    <!-- 支付模态框暂时禁用 -->
-    <!-- PaymentModal 暂时移除 -->
+    <!-- 工具内容 -->
+    <div class="container mx-auto px-6 py-16">
+      <div class="tool-content mx-auto">
+        <!-- 输入区域 -->
+        <div class="card">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold">{{ t('common.input') }}</h2>
+            <div class="space-x-2">
+              <button
+                @click="clearInput"
+                class="btn-secondary text-sm px-3 py-1"
+              >
+                {{ t('common.clear') }}
+              </button>
+              <button
+                @click="loadExample"
+                class="btn-secondary text-sm px-3 py-1"
+              >
+                {{ t('common.example') }}
+              </button>
+            </div>
+          </div>
+          <textarea
+            v-model="inputJson"
+            placeholder='{"name": "John", "age": 30, "city": "New York"}'
+            class="input-field min-h-[200px] font-mono text-sm"
+            @input="formatJson"
+          ></textarea>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="flex flex-wrap gap-4 justify-center">
+          <button
+            @click="formatJson"
+            class="btn-primary"
+          >
+            {{ t('tools.jsonFormatter.format') }}
+          </button>
+          <button
+            @click="minifyJson"
+            class="btn-secondary"
+          >
+            {{ t('tools.jsonFormatter.minify') }}
+          </button>
+          <button
+            @click="validateJson"
+            class="btn-secondary"
+          >
+            {{ t('tools.jsonFormatter.validate') }}
+          </button>
+          <button
+            @click="copyResult"
+            class="btn-secondary"
+          >
+            {{ t('common.copy') }}
+          </button>
+        </div>
+
+        <!-- 输出区域 -->
+        <div class="card">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold">{{ t('common.output') }}</h2>
+            <div class="space-x-2">
+              <button
+                @click="copyResult"
+                class="btn-secondary text-sm px-3 py-1"
+              >
+                {{ t('common.copy') }}
+              </button>
+              <button
+                @click="downloadResult"
+                class="btn-secondary text-sm px-3 py-1"
+              >
+                {{ t('common.download') }}
+              </button>
+            </div>
+          </div>
+          <textarea
+            v-model="outputJson"
+            readonly
+            class="input-field min-h-[200px] font-mono text-sm bg-gray-50"
+            :class="{ 'border-red-300': error, 'border-green-300': isValid && !error }"
+          ></textarea>
+        </div>
+
+        <!-- 状态信息 -->
+        <div
+          v-if="statusMessage"
+          class="text-center p-4 rounded-md"
+          :class="statusClass"
+        >
+          {{ statusMessage }}
+        </div>
+
+        <!-- 工具信息 -->
+        <div class="card bg-blue-50 border-blue-200">
+          <h3 class="text-lg font-semibold mb-3 text-blue-900">
+            {{ t('tools.jsonFormatter.features.title') }}
+          </h3>
+          <ul class="space-y-2 text-blue-800">
+            <li>✅ {{ t('tools.jsonFormatter.features.format') }}</li>
+            <li>✅ {{ t('tools.jsonFormatter.features.validate') }}</li>
+            <li>✅ {{ t('tools.jsonFormatter.features.minify') }}</li>
+            <li>✅ {{ t('tools.jsonFormatter.features.syntax') }}</li>
+            <li>✅ {{ t('tools.jsonFormatter.features.download') }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -102,9 +136,7 @@ const { t } = useI18n()
 // SEO设置
 useHead({
   title: 'JSON Formatter',
-  meta: [
-    { name: 'description', content: 'free online JSON formatter, validator and minifier tool' }
-  ]
+  meta: [{ name: 'description', content: 'free online JSON formatter, validator and minifier tool' }]
 })
 
 // 工具函数
@@ -250,28 +282,9 @@ const showStatus = (message, type) => {
     statusMessage.value = ''
   }, 3000)
 }
-
 </script>
 
 <style scoped>
-.tool-container {
-  max-width: 4xl;
-  margin: 0 auto;
-  padding: 1rem;
-}
-
-.tool-header {
-  margin-bottom: 2rem;
-}
-
-.tool-title {
-  @apply text-3xl font-bold text-gray-900 mb-2;
-}
-
-.tool-description {
-  @apply text-gray-600;
-}
-
 .tool-content {
   @apply space-y-6;
 }

@@ -17,12 +17,12 @@
           <h3 class="text-lg font-semibold mb-4">{{ footerTexts.quickLinks }}</h3>
           <ul class="space-y-2">
             <li>
-              <NuxtLink to="/" class="text-gray-400 hover:text-white transition-colors">
+              <NuxtLink :to="localizedPath('/')" class="text-gray-400 hover:text-white transition-colors">
                 {{ navTexts.home }}
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/tools" class="text-gray-400 hover:text-white transition-colors">
+              <NuxtLink :to="localizedPath('/tools')" class="text-gray-400 hover:text-white transition-colors">
                 {{ navTexts.tools }}
               </NuxtLink>
             </li>
@@ -34,17 +34,17 @@
           <h3 class="text-lg font-semibold mb-4">{{ footerTexts.categories }}</h3>
           <ul class="space-y-2">
             <li>
-              <NuxtLink to="/tools?category=text" class="text-gray-400 hover:text-white transition-colors">
+              <NuxtLink :to="localizedPath('/tools?category=text')" class="text-gray-400 hover:text-white transition-colors">
                 {{ categoryTexts.text }}
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/tools?category=developer" class="text-gray-400 hover:text-white transition-colors">
+              <NuxtLink :to="localizedPath('/tools?category=developer')" class="text-gray-400 hover:text-white transition-colors">
                 {{ categoryTexts.developer }}
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/tools?category=utility" class="text-gray-400 hover:text-white transition-colors">
+              <NuxtLink :to="localizedPath('/tools?category=utility')" class="text-gray-400 hover:text-white transition-colors">
                 {{ categoryTexts.utility }}
               </NuxtLink>
             </li>
@@ -83,59 +83,42 @@
 </template>
 
 <script setup>
-// 完全客户端渲染的版本 - 避免所有SSR hydration问题
-const isClient = process.client
+// 使用Nuxt 3的i18n系统
+const { locale, t } = useI18n()
 
-// 导航文本 - 默认英文
-const navTexts = ref({
-  home: 'Home',
-  tools: 'Tools'
-})
+// 导航文本
+const navTexts = computed(() => ({
+  home: t('nav.home'),
+  tools: t('nav.tools')
+}))
 
-// 底部文本 - 默认英文
-const footerTexts = ref({
-  description: 'AI-powered online tools collection website for developers and daily use.',
-  quickLinks: 'Quick Links',
-  categories: 'Categories',
-  support: 'Support',
-  contact: 'Contact',
-  privacy: 'Privacy Policy',
-  terms: 'Terms of Service',
-  allRightsReserved: 'All Rights Reserved'
-})
+// 底部文本
+const footerTexts = computed(() => ({
+  description: t('footer.description'),
+  quickLinks: t('footer.quickLinks'),
+  categories: t('footer.categories'),
+  support: t('footer.support'),
+  contact: t('footer.contact'),
+  privacy: t('footer.privacy'),
+  terms: t('footer.terms'),
+  allRightsReserved: t('footer.allRightsReserved')
+}))
 
-// 分类文本 - 默认英文
-const categoryTexts = ref({
-  text: 'Text Tools',
-  developer: 'Developer Tools',
-  utility: 'Utility Tools'
-})
+// 分类文本
+const categoryTexts = computed(() => ({
+  text: t('categories.text'),
+  developer: t('categories.developer'),
+  utility: t('categories.utility')
+}))
 
-// 客户端初始化
-onMounted(() => {
-  if (isClient) {
-    const currentPath = window.location.pathname
-    if (currentPath.startsWith('/zh')) {
-      navTexts.value = {
-        home: '首页',
-        tools: '工具'
-      }
-      footerTexts.value = {
-        description: 'AI驱动的在线小工具集合网站，为开发者和日常使用提供便利的工具。',
-        quickLinks: '快速链接',
-        categories: '工具分类',
-        support: '支持',
-        contact: '联系我们',
-        privacy: '隐私政策',
-        terms: '服务条款',
-        allRightsReserved: '版权所有'
-      }
-      categoryTexts.value = {
-        text: '文本工具',
-        developer: '开发者工具',
-        utility: '实用工具'
-      }
-    }
+// 获取本地化路径 - 参考 AppHeader.vue 的实现
+const localizedPath = (path) => {
+  if (locale.value === 'zh' && !path.startsWith('/zh')) {
+    return path === '/' ? '/zh' : `/zh${path}`
   }
-})
+  if (locale.value === 'en' && path.startsWith('/zh')) {
+    return path.replace('/zh', '') || '/'
+  }
+  return path
+}
 </script>

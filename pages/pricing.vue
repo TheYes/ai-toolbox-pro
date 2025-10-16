@@ -7,9 +7,11 @@
     <main>
       <div class="container mx-auto px-6 py-16">
         <div class="text-center">
-          <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ t('pricing.title') }}</h1>
+          <h1 class="text-4xl font-bold text-gray-900 mb-4">
+            {{ locale === 'zh' ? '选择适合您的计划' : 'Choose Your Perfect Plan' }}
+          </h1>
           <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-12">
-            {{ t('pricing.description') }}
+            {{ locale === 'zh' ? '选择适合您需求的定价方案。通过我们经济实惠的订阅计划解锁所有高级功能。' : 'Select the perfect pricing plan for your needs. Unlock all premium features with our affordable subscription plans.' }}
           </p>
         </div>
 
@@ -17,30 +19,16 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           <!-- 月付计划 -->
           <div class="bg-white rounded-lg border-2 border-gray-200 p-6 hover:shadow-lg transition-shadow">
-            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ t('pricing.plans.monthly.name') }}</h3>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">
+              {{ locale === 'zh' ? '专业版 月付' : 'Pro Monthly' }}
+            </h3>
             <div class="text-4xl font-bold text-gray-900 mb-4">
               ${{ pricingPlans.monthly.price }}<span class="text-lg text-gray-600">/month</span>
             </div>
             <ul class="space-y-2 mb-6">
-              <li class="flex items-center text-gray-700">
+              <li v-for="feature in (locale === 'zh' ? ['无限制使用所有工具', '优先客服支持', '云端同步设置', '无广告体验'] : ['Unlimited access to all tools', 'Priority customer support', 'Cloud sync settings', 'Ad-free experience'])" :key="feature" class="flex items-center text-gray-700">
                 <span class="text-green-500 mr-2">✓</span>
-                <span v-if="locale === 'zh'">无限制使用所有工具</span>
-                <span v-else>Unlimited access to all tools</span>
-              </li>
-              <li class="flex items-center text-gray-700">
-                <span class="text-green-500 mr-2">✓</span>
-                <span v-if="locale === 'zh'">优先客服支持</span>
-                <span v-else>Priority customer support</span>
-              </li>
-              <li class="flex items-center text-gray-700">
-                <span class="text-green-500 mr-2">✓</span>
-                <span v-if="locale === 'zh'">云端同步设置</span>
-                <span v-else>Cloud sync settings</span>
-              </li>
-              <li class="flex items-center text-gray-700">
-                <span class="text-green-500 mr-2">✓</span>
-                <span v-if="locale === 'zh'">无广告体验</span>
-                <span v-else>Ad-free experience</span>
+                <span>{{ feature }}</span>
               </li>
             </ul>
             <button
@@ -55,44 +43,25 @@
                 </svg>
                 Processing...
               </span>
-              <span v-else>{{ t('pricing.plans.monthly.button') }}</span>
+              <span v-else>{{ locale === 'zh' ? '选择月付计划' : 'Choose Monthly' }}</span>
             </button>
           </div>
 
           <!-- 年付计划 -->
           <div class="bg-white rounded-lg border-2 border-blue-500 p-6 hover:shadow-lg transition-shadow transform scale-105 relative">
             <div class="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium inline-block mb-4">
-              {{ t('pricing.mostPopular') }}
+              {{ locale === 'zh' ? '最受欢迎' : 'Most Popular' }}
             </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ t('pricing.plans.yearly.name') }}</h3>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">
+              {{ locale === 'zh' ? '专业版 年付' : 'Pro Yearly' }}
+            </h3>
             <div class="text-4xl font-bold text-gray-900 mb-4">
               ${{ pricingPlans.yearly.price }}<span class="text-lg text-gray-600">/year</span>
             </div>
             <ul class="space-y-2 mb-6">
-              <li class="flex items-center text-gray-700">
+              <li v-for="feature in (locale === 'zh' ? ['无限制使用所有工具', '优先客服支持', '云端同步设置', '无广告体验', '年付节省33%'] : ['Unlimited access to all tools', 'Priority customer support', 'Cloud sync settings', 'Ad-free experience', 'Save 33% annually'])" :key="feature" class="flex items-center text-gray-700">
                 <span class="text-green-500 mr-2">✓</span>
-                <span v-if="locale === 'zh'">无限制使用所有工具</span>
-                <span v-else>Unlimited access to all tools</span>
-              </li>
-              <li class="flex items-center text-gray-700">
-                <span class="text-green-500 mr-2">✓</span>
-                <span v-if="locale === 'zh'">优先客服支持</span>
-                <span v-else>Priority customer support</span>
-              </li>
-              <li class="flex items-center text-gray-700">
-                <span class="text-green-500 mr-2">✓</span>
-                <span v-if="locale === 'zh'">云端同步设置</span>
-                <span v-else>Cloud sync settings</span>
-              </li>
-              <li class="flex items-center text-gray-700">
-                <span class="text-green-500 mr-2">✓</span>
-                <span v-if="locale === 'zh'">无广告体验</span>
-                <span v-else>Ad-free experience</span>
-              </li>
-              <li class="flex items-center text-gray-700">
-                <span class="text-green-500 mr-2">✓</span>
-                <span v-if="locale === 'zh'">年付节省33%</span>
-                <span v-else>Save 33% annually</span>
+                <span>{{ feature }}</span>
               </li>
             </ul>
             <button
@@ -107,41 +76,22 @@
                 </svg>
                 Processing...
               </span>
-              <span v-else>{{ t('pricing.plans.yearly.button') }}</span>
+              <span v-else>{{ locale === 'zh' ? '选择年付计划' : 'Choose Yearly' }}</span>
             </button>
           </div>
 
           <!-- 终身计划 -->
           <div class="bg-white rounded-lg border-2 border-gray-200 p-6 hover:shadow-lg transition-shadow">
-            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ t('pricing.plans.lifetime.name') }}</h3>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">
+              {{ locale === 'zh' ? '专业版 终身' : 'Pro Lifetime' }}
+            </h3>
             <div class="text-4xl font-bold text-gray-900 mb-4">
               ${{ pricingPlans.lifetime.price }}<span class="text-lg text-gray-600">/once</span>
             </div>
             <ul class="space-y-2 mb-6">
-              <li class="flex items-center text-gray-700">
+              <li v-for="feature in (locale === 'zh' ? ['终身无限制使用', '所有未来功能更新', '优先客服支持', '云端同步设置', '永久去除广告'] : ['Lifetime unlimited access', 'All future feature updates', 'Priority customer support', 'Cloud sync settings', 'Permanent ad removal'])" :key="feature" class="flex items-center text-gray-700">
                 <span class="text-green-500 mr-2">✓</span>
-                <span v-if="locale === 'zh'">终身无限制使用</span>
-                <span v-else>Lifetime unlimited access</span>
-              </li>
-              <li class="flex items-center text-gray-700">
-                <span class="text-green-500 mr-2">✓</span>
-                <span v-if="locale === 'zh'">所有未来功能更新</span>
-                <span v-else>All future feature updates</span>
-              </li>
-              <li class="flex items-center text-gray-700">
-                <span class="text-green-500 mr-2">✓</span>
-                <span v-if="locale === 'zh'">优先客服支持</span>
-                <span v-else>Priority customer support</span>
-              </li>
-              <li class="flex items-center text-gray-700">
-                <span class="text-green-500 mr-2">✓</span>
-                <span v-if="locale === 'zh'">云端同步设置</span>
-                <span v-else>Cloud sync settings</span>
-              </li>
-              <li class="flex items-center text-gray-700">
-                <span class="text-green-500 mr-2">✓</span>
-                <span v-if="locale === 'zh'">永久去除广告</span>
-                <span v-else>Permanent ad removal</span>
+                <span>{{ feature }}</span>
               </li>
             </ul>
             <button
@@ -156,7 +106,7 @@
                 </svg>
                 Processing...
               </span>
-              <span v-else>{{ t('pricing.plans.lifetime.button') }}</span>
+              <span v-else>{{ locale === 'zh' ? '选择终身计划' : 'Choose Lifetime' }}</span>
             </button>
           </div>
         </div>
@@ -173,6 +123,7 @@
 
 <script setup>
 import { useI18nRouting } from '~/composables/useI18nRouting'
+import PaymentModal from '~/components/payment/PaymentModal.vue'
 
 // 多语言支持
 const { t, locale } = useI18n()
@@ -180,55 +131,71 @@ const { t, locale } = useI18n()
 // 根据当前语言选择内容
 const currentLang = computed(() => locale.value)
 
-// SEO设置
-useHead(() => ({
-  title: t('pricing.title') + ' - AI Toolbox Pro',
-  meta: [
-    { name: 'description', content: t('pricing.description') },
-    { name: 'keywords', content: 'pricing, subscription, plans, pro features, premium tools' },
-    { name: 'author', content: 'AI Toolbox Pro' },
-    { name: 'robots', content: 'index, follow' },
-    { property: 'og:title', content: t('pricing.title') + ' - AI Toolbox Pro' },
-    { property: 'og:description', content: t('pricing.description') },
-    { property: 'og:type', content: 'website' },
-    { property: 'og:url', content: 'https://ai-toolbox-pro.com/pricing' },
-    { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: t('pricing.title') + ' - AI Toolbox Pro' },
-    { name: 'twitter:description', content: t('pricing.description') }
-  ],
-  script: [
-    {
-      type: 'application/ld+json',
-      children: JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'WebPage',
-        name: t('pricing.title'),
-        description: t('pricing.description'),
-        url: 'https://ai-toolbox-pro.com/pricing',
-        mainEntity: {
-          '@type': 'Product',
-          name: 'AI Toolbox Pro Subscription',
-          offers: [
-            {
-              '@type': 'Offer',
-              name: t('pricing.plans.monthly.name'),
-              price: '9.99',
-              priceCurrency: 'USD',
-              availability: 'https://schema.org/InStock'
-            },
-            {
-              '@type': 'Offer',
-              name: t('pricing.plans.yearly.name'),
-              price: '79.99',
-              priceCurrency: 'USD',
-              availability: 'https://schema.org/InStock'
-            }
-          ]
-        }
-      })
-    }
-  ]
-}))
+// SEO设置 - 使用直接的多语言文本避免 i18n 问题
+const headData = computed(() => {
+  const title = locale.value === 'zh' ? '选择适合您的计划' : 'Choose Your Perfect Plan'
+  const description = locale.value === 'zh'
+    ? '选择适合您需求的定价方案。通过我们经济实惠的订阅计划解锁所有高级功能。'
+    : 'Select the perfect pricing plan for your needs. Unlock all premium features with our affordable subscription plans.'
+  const monthlyName = locale.value === 'zh' ? '专业版 月付' : 'Pro Monthly'
+  const yearlyName = locale.value === 'zh' ? '专业版 年付' : 'Pro Yearly'
+
+  return {
+    title: title + ' - AI Toolbox Pro',
+    htmlAttrs: {
+      lang: locale.value
+    },
+    meta: [
+      { name: 'description', content: description },
+      { name: 'keywords', content: 'pricing, subscription, plans, pro features, premium tools' },
+      { name: 'author', content: 'AI Toolbox Pro' },
+      { name: 'robots', content: 'index, follow' },
+      { property: 'og:title', content: title + ' - AI Toolbox Pro' },
+      { property: 'og:description', content: description },
+      { property: 'og:type', content: 'website' },
+      { property: 'og:url', content: locale.value === 'zh' ? 'https://ai-toolbox-pro.com/zh/pricing' : 'https://ai-toolbox-pro.com/pricing' },
+      { name: 'twitter:card', content: 'summary_large_image' },
+      { name: 'twitter:title', content: title + ' - AI Toolbox Pro' },
+      { name: 'twitter:description', content: description }
+    ],
+    script: [
+      {
+        type: 'application/ld+json',
+        children: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'WebPage',
+          name: title,
+          description: description,
+          url: locale.value === 'zh' ? 'https://ai-toolbox-pro.com/zh/pricing' : 'https://ai-toolbox-pro.com/pricing',
+          inLanguage: locale.value,
+          mainEntity: {
+            '@type': 'Product',
+            name: 'AI Toolbox Pro Subscription',
+            offers: [
+              {
+                '@type': 'Offer',
+                name: monthlyName,
+                price: '9.99',
+                priceCurrency: 'USD',
+                availability: 'https://schema.org/InStock'
+              },
+              {
+                '@type': 'Offer',
+                name: yearlyName,
+                price: '79.99',
+                priceCurrency: 'USD',
+                availability: 'https://schema.org/InStock'
+              }
+            ]
+          }
+        })
+      }
+    ]
+  }
+})
+
+// 使用计算属性确保响应式
+useHead(headData)
 
 // 支付功能
 const paymentStore = usePaymentStore()

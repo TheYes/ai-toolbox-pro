@@ -3,12 +3,7 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
 
   // 模块配置
-  modules: [
-    '@nuxtjs/tailwindcss',
-    '@nuxtjs/i18n',
-    '@pinia/nuxt',
-    'nuxt-creem'
-  ],
+  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/i18n', '@pinia/nuxt', 'nuxt-creem'],
 
   // 启用服务端渲染，但优化配置
   ssr: true,
@@ -25,7 +20,7 @@ export default defineNuxtConfig({
     componentIslands: false
   },
 
-  // 禁用自动组件导入以解决路径问题
+  // 禁用自动组件导入以避免路径解析问题
   components: false,
 
   // CSS配置
@@ -65,7 +60,15 @@ export default defineNuxtConfig({
     define: {
       __VUE_OPTIONS_API__: true,
       __VUE_PROD_DEVTOOLS__: false
-    }
+    },
+    // 修复预转换错误
+    serverConfig: {
+      fs: {
+        strict: false
+      }
+    },
+    // 优化组件解析
+    assetsInclude: ['**/*.md', '**/*.txt']
   },
 
   // 修复unhead兼容性问题
@@ -81,13 +84,15 @@ export default defineNuxtConfig({
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: 'description', content: 'Free online tools for developers and daily use' },
-        { name: 'keywords', content: 'online tools, web tools, json formatter, base64 encoder, qr code generator, free tools' },
+        { name: 'keywords', content: 'online tools, web tools, json formatter, base64 encoder, qr code generator, free tools' }
         // 可以在这里添加自定义域名的 meta 标签
         // { property: 'og:url', content: 'https://yourdomain.com' }
       ],
-      link: [
-        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-      ]
+      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+      // 全局 HTML 属性设置
+      htmlAttrs: {
+        lang: 'en' // 默认语言，会被页面级别的设置覆盖
+      }
     }
   },
 
@@ -100,7 +105,7 @@ export default defineNuxtConfig({
     storage: {},
     // 简化预渲染路由，避免i18n构建错误
     prerender: {
-      routes: ['/']
+      routes: ['/', '/pricing', '/tools', '/zh/pricing', '/zh/tools']
     }
   },
 
@@ -122,8 +127,7 @@ export default defineNuxtConfig({
       }
     ],
     defaultLocale: 'en',
-    langDir: 'locales',
-    lazy: false,
+    langDir: './locales',
     strategy: 'prefix_except_default',
     detectBrowserLanguage: {
       useCookie: true,
@@ -131,7 +135,14 @@ export default defineNuxtConfig({
       redirectOn: 'root',
       alwaysRedirect: false,
       fallbackLocale: 'en'
-    }
+    },
+    // 优化编译配置，减少构建时的严格检查
+    compilation: {
+      strictMessage: false,
+      escapeHtml: false
+    },
+    // 自定义路由配置
+    customRoutes: 'config'
   },
 
   // 运行时配置

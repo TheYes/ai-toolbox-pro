@@ -10,10 +10,16 @@
           {{ $t('hero.description') }}
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <NuxtLink :to="getLocalizedPath('/tools')" class="btn-primary text-lg px-8 py-3">
+          <NuxtLink
+            :to="getLocalizedPath('/tools')"
+            class="btn-primary text-lg px-8 py-3"
+          >
             {{ $t('hero.browseTools') }}
           </NuxtLink>
-          <a href="#featured-tools" class="btn-secondary text-lg px-8 py-3">
+          <a
+            href="#featured-tools"
+            class="btn-secondary text-lg px-8 py-3"
+          >
             {{ $t('hero.featuredTools') }}
           </a>
         </div>
@@ -21,19 +27,28 @@
     </section>
 
     <!-- 特色工具 -->
-    <section id="featured-tools" class="py-20">
+    <section
+      id="featured-tools"
+      class="py-20"
+    >
       <div class="container mx-auto px-6">
         <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">
           {{ $t('featured.title') }}
         </h2>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div v-for="tool in featuredTools" :key="tool.name"
-               class="card hover:shadow-lg transition-shadow duration-300">
+          <div
+            v-for="tool in featuredTools"
+            :key="tool.name"
+            class="card hover:shadow-lg transition-shadow duration-300"
+          >
             <div class="text-center">
               <div class="text-4xl mb-4">{{ tool.icon }}</div>
               <h3 class="text-xl font-semibold mb-2">{{ $t(tool.name) }}</h3>
               <p class="text-gray-600 mb-4">{{ $t(tool.description) }}</p>
-              <NuxtLink :to="getLocalizedPath(tool.link)" class="btn-primary">
+              <NuxtLink
+                :to="getLocalizedPath(tool.link)"
+                class="btn-primary"
+              >
                 {{ $t('common.useNow') }}
               </NuxtLink>
             </div>
@@ -49,7 +64,11 @@
           {{ $t('features.title') }}
         </h2>
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div v-for="feature in features" :key="feature.title" class="text-center">
+          <div
+            v-for="feature in features"
+            :key="feature.title"
+            class="text-center"
+          >
             <div class="text-3xl mb-4">{{ feature.icon }}</div>
             <h3 class="text-lg font-semibold mb-2">{{ $t(feature.title) }}</h3>
             <p class="text-gray-600">{{ $t(feature.description) }}</p>

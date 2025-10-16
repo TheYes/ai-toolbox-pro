@@ -3,7 +3,7 @@
     <nav class="container mx-auto px-6 py-4">
       <div class="flex justify-between items-center">
         <!-- Logo -->
-        <NuxtLink to="/" class="flex items-center space-x-2">
+        <NuxtLink :to="localizedPath('/')" class="flex items-center space-x-2">
           <div class="text-2xl font-bold text-primary-600">
             🛠️ AI Toolbox
           </div>
@@ -11,15 +11,15 @@
 
         <!-- 桌面导航 -->
         <div class="hidden md:flex items-center space-x-8">
-          <NuxtLink to="/"
+          <NuxtLink :to="localizedPath('/')"
                     class="text-gray-700 hover:text-primary-600 transition-colors">
             {{ navTexts.home }}
           </NuxtLink>
-          <NuxtLink to="/tools"
+          <NuxtLink :to="localizedPath('/tools')"
                     class="text-gray-700 hover:text-primary-600 transition-colors">
             {{ navTexts.tools }}
           </NuxtLink>
-          <NuxtLink to="/pricing"
+          <NuxtLink :to="localizedPath('/pricing')"
                     class="text-gray-700 hover:text-primary-600 transition-colors">
             {{ navTexts.pricing }}
           </NuxtLink>
@@ -59,17 +59,17 @@
       <!-- 移动端菜单 -->
       <div v-if="showMobileMenu" class="md:hidden mt-4 pt-4 border-t border-gray-200">
         <div class="flex flex-col space-y-3">
-          <NuxtLink to="/"
+          <NuxtLink :to="localizedPath('/')"
                     @click="closeMobileMenu"
                     class="text-gray-700 hover:text-primary-600 transition-colors">
             {{ navTexts.home }}
           </NuxtLink>
-          <NuxtLink to="/tools"
+          <NuxtLink :to="localizedPath('/tools')"
                     @click="closeMobileMenu"
                     class="text-gray-700 hover:text-primary-600 transition-colors">
             {{ navTexts.tools }}
           </NuxtLink>
-          <NuxtLink to="/pricing"
+          <NuxtLink :to="localizedPath('/pricing')"
                     @click="closeMobileMenu"
                     class="text-gray-700 hover:text-primary-600 transition-colors">
             {{ navTexts.pricing }}
@@ -93,45 +93,32 @@
 </template>
 
 <script setup>
-// 完全客户端渲染的版本 - 避免所有SSR hydration问题
-const isClient = process.client
+// 简化的多语言支持
+const { locale } = useI18n()
+const router = useRouter()
+const route = useRoute()
 
 // 响应式数据
 const showMobileMenu = ref(false)
 const showLanguageMenu = ref(false)
 
-// 导航文本 - 客户端动态计算
-const navTexts = ref({
-  home: 'Home',
-  tools: 'Tools',
-  pricing: 'Pricing'
-})
+// 导航文本 - 直接使用已知的多语言映射
+const navTexts = computed(() => ({
+  home: locale.value === 'zh' ? '首页' : 'Home',
+  tools: locale.value === 'zh' ? '工具' : 'Tools',
+  pricing: locale.value === 'zh' ? '定价' : 'Pricing'
+}))
 
-// 可用语言
-const availableLocales = [
+// 可用语言 - 简化配置
+const availableLocales = computed(() => [
   { code: 'en', name: 'English' },
   { code: 'zh', name: '中文' }
-]
+])
 
-// 当前语言
-const currentLanguage = ref({
-  code: 'en',
-  name: 'English'
-})
-
-// 客户端初始化
-onMounted(() => {
-  if (isClient) {
-    const currentPath = window.location.pathname
-    if (currentPath.startsWith('/zh')) {
-      navTexts.value = {
-        home: '首页',
-        tools: '工具',
-        pricing: '定价'
-      }
-      currentLanguage.value = { code: 'zh', name: '中文' }
-    }
-  }
+// 当前语言信息
+const currentLanguage = computed(() => {
+  const currentCode = locale.value
+  return availableLocales.value.find(l => l.code === currentCode) || availableLocales.value[0]
 })
 
 // 切换移动端菜单
@@ -152,32 +139,63 @@ const toggleLanguageMenu = () => {
   showLanguageMenu.value = !showLanguageMenu.value
 }
 
-// 处理语言切换 - 简化版本
-const handleLanguageSwitch = (localeCode) => {
-  if (!isClient) return
-
-  const currentPath = window.location.pathname
-
-  if (localeCode === 'zh') {
-    if (currentPath === '/') {
-      window.location.href = '/zh'
-    } else if (!currentPath.startsWith('/zh')) {
-      window.location.href = '/zh' + currentPath
-    }
-  } else {
-    if (currentPath.startsWith('/zh')) {
-      const pathWithoutZh = currentPath.replace('/zh', '') || '/'
-      window.location.href = pathWithoutZh
-    }
+// 获取本地化路径
+const localizedPath = (path) => {
+  if (locale.value === 'zh' && !path.startsWith('/zh')) {
+    return path === '/' ? '/zh' : `/zh${path}`
   }
-
-  showLanguageMenu.value = false
-  showMobileMenu.value = false
+  if (locale.value === 'en' && path.startsWith('/zh')) {
+    return path.replace('/zh', '') || '/'
+  }
+  return path
 }
 
-// 点击外部关闭语言菜单 - 只在客户端执行
+// 处理语言切换 - 使用Nuxt 3的setLocale方法
+const { setLocale } = useI18n()
+const handleLanguageSwitch = async (localeCode) => {
+  try {
+    // 关闭菜单
+    showLanguageMenu.value = false
+    showMobileMenu.value = false
+
+    // 如果语言相同，不进行切换
+    if (locale.value === localeCode) {
+      return
+    }
+
+    // 使用Nuxt 3的内置语言切换功能
+    await setLocale(localeCode)
+
+    // 获取当前路径的纯净版本（移除语言前缀）
+    const currentPath = route.path
+    let cleanPath = currentPath
+
+    // 移除现有的语言前缀
+    if (currentPath.startsWith('/zh/')) {
+      cleanPath = currentPath.slice(3) // 移除 "/zh"
+    } else if (currentPath === '/zh') {
+      cleanPath = '/'
+    }
+
+    // 根据目标语言添加相应的前缀
+    let newPath = cleanPath
+    if (localeCode === 'zh') {
+      newPath = cleanPath === '/' ? '/zh' : `/zh${cleanPath}`
+    }
+    // 如果是英文，不需要前缀，直接使用 cleanPath
+
+    // 如果路径发生变化，进行导航
+    if (newPath !== currentPath) {
+      await router.push(newPath)
+    }
+  } catch (error) {
+    console.error('Language switch failed:', error)
+  }
+}
+
+// 点击外部关闭语言菜单
 onMounted(() => {
-  if (isClient) {
+  if (process.client) {
     const handleClickOutside = (event) => {
       const target = event.target
       if (!target.closest('.relative')) {

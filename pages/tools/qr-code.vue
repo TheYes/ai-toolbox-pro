@@ -1,104 +1,142 @@
 <template>
-  <div class="tool-container">
+  <div class="min-h-screen">
     <!-- 工具头部 -->
-    <div class="tool-header">
-      <NuxtLink :to="getLocalizedPath('/tools')" class="text-primary-600 hover:text-primary-700 mb-4 inline-block">
-        ← Back to Tools
-      </NuxtLink>
-      <h1 class="tool-title">QR Code Generator</h1>
-      <p class="tool-description">Generate QR codes from text, URLs, or any data</p>
+    <div class="bg-gradient-to-br from-primary-50 to-secondary-50 py-16">
+      <div class="container mx-auto px-6">
+        <NuxtLink
+          :to="getLocalizedPath('/tools')"
+          class="text-primary-600 hover:text-primary-700 mb-4 inline-block"
+        >
+          ← {{ t('common.backToTools') }}
+        </NuxtLink>
+
+        <h1 class="text-4xl font-bold text-gray-900 mb-4 text-center">{{ t('tools.qrCode.name') }}</h1>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto text-center">{{ t('tools.qrCode.description') }}</p>
+      </div>
     </div>
 
-    <div class="tool-content">
-      <!-- 输入区域 -->
-      <div class="card">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-semibold">Input</h2>
-          <div class="space-x-2">
-            <button @click="clearInput" class="btn-secondary text-sm px-3 py-1">
-              Clear
-            </button>
-            <button @click="loadExample" class="btn-secondary text-sm px-3 py-1">
-              Example
-            </button>
+    <!-- 工具内容 -->
+    <div class="container mx-auto px-6 py-16">
+      <div class="tool-content">
+        <!-- 输入区域 -->
+        <div class="card">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold">{{ t('common.input') }}</h2>
+            <div class="space-x-2">
+              <button
+                @click="clearInput"
+                class="btn-secondary text-sm px-3 py-1"
+              >
+                {{ t('common.clear') }}
+              </button>
+              <button
+                @click="loadExample"
+                class="btn-secondary text-sm px-3 py-1"
+              >
+                {{ t('common.example') }}
+              </button>
+            </div>
+          </div>
+          <textarea
+            v-model="inputText"
+            :placeholder="t('tools.qrCode.placeholder')"
+            class="input-field min-h-[100px]"
+            @input="generateQRCode"
+          ></textarea>
+        </div>
+
+        <!-- 设置区域 -->
+        <div class="card">
+          <h3 class="text-lg font-semibold mb-4">{{ t('tools.qrCode.settings') }}</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- 尺寸设置 -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"> {{ t('tools.qrCode.size') }}: {{ qrSize }}px </label>
+              <input
+                type="range"
+                v-model="qrSize"
+                min="128"
+                max="512"
+                step="32"
+                class="w-full"
+                @input="generateQRCode"
+              />
+            </div>
+
+            <!-- 错误纠正级别 -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                {{ t('tools.qrCode.errorCorrection') }}
+              </label>
+              <select
+                v-model="errorCorrectionLevel"
+                class="input-field"
+                @change="generateQRCode"
+              >
+                <option value="L">L - Low (7%)</option>
+                <option value="M">M - Medium (15%)</option>
+                <option value="Q">Q - Quartile (25%)</option>
+                <option value="H">H - High (30%)</option>
+              </select>
+            </div>
           </div>
         </div>
-        <textarea
-          v-model="inputText"
-          placeholder="Enter text, URL, or any data to encode into QR code..."
-          class="input-field min-h-[120px]"
-          @input="generateQRCode"
-        ></textarea>
-      </div>
 
-      <!-- 设置区域 -->
-      <div class="card">
-        <h2 class="text-xl font-semibold mb-4">Settings</h2>
-        <div class="grid md:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              Size (pixels)
-            </label>
-            <input
-              v-model.number="qrSize"
-              type="number"
-              min="100"
-              max="500"
-              class="input-field"
-              @input="generateQRCode"
+        <!-- 操作按钮 -->
+        <div class="flex flex-wrap gap-4 justify-center">
+          <button
+            @click="generateQRCode"
+            class="btn-primary"
+            :disabled="isGenerating"
+          >
+            {{ isGenerating ? t('common.generating') : t('tools.qrCode.generate') }}
+          </button>
+          <button
+            @click="downloadQRCode"
+            class="btn-secondary"
+            :disabled="!qrCodeDataUrl"
+          >
+            {{ t('common.download') }}
+          </button>
+        </div>
+
+        <!-- 二维码显示区域 -->
+        <div
+          v-if="qrCodeDataUrl"
+          class="card"
+        >
+          <h3 class="text-lg font-semibold mb-4">{{ t('tools.qrCode.result') }}</h3>
+          <div class="flex justify-center">
+            <img
+              :src="qrCodeDataUrl"
+              alt="QR Code"
+              class="border border-gray-300 rounded-lg"
             />
           </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              Error Correction Level
-            </label>
-            <select v-model="errorCorrectionLevel" class="input-field" @change="generateQRCode">
-              <option value="L">Low (7%)</option>
-              <option value="M">Medium (15%)</option>
-              <option value="Q">Quartile (25%)</option>
-              <option value="H">High (30%)</option>
-            </select>
-          </div>
         </div>
-      </div>
 
-      <!-- 二维码显示区域 -->
-      <div class="card">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-semibold">QR Code</h2>
-          <div class="space-x-2">
-            <button @click="downloadQRCode" class="btn-secondary text-sm px-3 py-1" :disabled="!qrCodeDataUrl">
-              Download
-            </button>
-          </div>
+        <!-- 状态信息 -->
+        <div
+          v-if="statusMessage"
+          class="text-center p-4 rounded-md"
+          :class="statusClass"
+        >
+          {{ statusMessage }}
         </div>
-        <div class="flex justify-center items-center min-h-[300px] bg-gray-50 rounded-lg">
-          <div v-if="qrCodeDataUrl" class="text-center">
-            <img :src="qrCodeDataUrl" :alt="'QR Code for ' + inputText" class="mx-auto" />
-            <p class="text-sm text-gray-600 mt-2">
-              {{ $t('common.length') }}: {{ inputText.length }} {{ $t('common.characters') }}
-            </p>
-          </div>
-          <div v-else class="text-center text-gray-500">
-            <div class="text-6xl mb-4">📱</div>
-            <p>Enter text above to generate QR code</p>
-          </div>
-        </div>
-      </div>
 
-      <!-- 功能说明 -->
-      <div class="card bg-blue-50 border-blue-200">
-        <h3 class="text-lg font-semibold mb-3 text-blue-900">
-          Features:
-        </h3>
-        <ul class="space-y-2 text-blue-800">
-          <li>✅ Generate QR codes from any text or URL</li>
-          <li>✅ Adjustable size from 100 to 500 pixels</li>
-          <li>✅ Multiple error correction levels</li>
-          <li>✅ Download QR code as PNG image</li>
-          <li>✅ Support for UTF-8 characters</li>
-          <li>✅ Instant generation</li>
-        </ul>
+        <!-- 工具信息 -->
+        <div class="card bg-blue-50 border-blue-200">
+          <h3 class="text-lg font-semibold mb-3 text-blue-900">
+            {{ t('tools.qrCode.features.title') }}
+          </h3>
+          <ul class="space-y-2 text-blue-800">
+            <li>✅ {{ t('tools.qrCode.features.generate') }}</li>
+            <li>✅ {{ t('tools.qrCode.features.customSize') }}</li>
+            <li>✅ {{ t('tools.qrCode.features.errorCorrection') }}</li>
+            <li>✅ {{ t('tools.qrCode.features.download') }}</li>
+            <li>✅ {{ t('tools.qrCode.features.quick') }}</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -112,9 +150,7 @@ const { t } = useI18n()
 // SEO设置
 useHead({
   title: 'QR Code Generator',
-  meta: [
-    { name: 'description', content: 'Free online QR code generator from text or URLs' }
-  ]
+  meta: [{ name: 'description', content: 'Free online QR code generator from text or URLs' }]
 })
 
 // 工具函数
@@ -128,15 +164,13 @@ const qrCodeDataUrl = ref('')
 const isGenerating = ref(false)
 
 // 示例数据
-const exampleTexts = [
-  'https://example.com',
-  'Hello, World!',
-  'Contact: email@example.com',
-  'WIFI:T:WPA;S:NetworkName;P:Password;;'
-]
+const exampleTexts = ['https://example.com', 'Hello, World!', 'Contact: email@example.com', 'WIFI:T:WPA;S:NetworkName;P:Password;;']
 
 // 生成二维码
 const generateQRCode = async () => {
+  // 确保只在客户端执行以避免 SSR 问题
+  if (!process.client) return
+
   if (!inputText.value.trim()) {
     qrCodeDataUrl.value = ''
     return
@@ -185,7 +219,6 @@ const generateQRCode = async () => {
     drawPositionPattern(ctx, 0, modules - 7, moduleSize)
 
     qrCodeDataUrl.value = canvas.toDataURL('image/png')
-
   } catch (error) {
     console.error('Error generating QR code:', error)
     showStatus('Error generating QR code', 'error')
@@ -226,6 +259,9 @@ const clearInput = () => {
 
 // 加载示例
 const loadExample = () => {
+  // 确保只在客户端执行以避免 SSR 问题
+  if (!process.client) return
+
   const randomExample = exampleTexts[Math.floor(Math.random() * exampleTexts.length)]
   inputText.value = randomExample
   generateQRCode()
@@ -246,24 +282,6 @@ const showStatus = (message, type) => {
 </script>
 
 <style scoped>
-.tool-container {
-  max-width: 4xl;
-  margin: 0 auto;
-  padding: 1rem;
-}
-
-.tool-header {
-  margin-bottom: 2rem;
-}
-
-.tool-title {
-  @apply text-3xl font-bold text-gray-900 mb-2;
-}
-
-.tool-description {
-  @apply text-gray-600;
-}
-
 .tool-content {
   @apply space-y-6;
 }

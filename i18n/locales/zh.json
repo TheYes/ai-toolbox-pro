@@ -2,6 +2,7 @@
   "nav": {
     "home": "首页",
     "tools": "工具",
+    "pricing": "定价",
     "language": "语言"
   },
   "hero": {
@@ -81,10 +82,9 @@
         "title": "功能特点：",
         "encode": "为安全传输编码URL",
         "decode": "解码URL为原始格式",
-        "utf8": "支持UTF-8字符",
-        "realtime": "实时编码/解码",
-        "copyDownload": "复制和下载结果",
-        "validate": "验证URL格式"
+        "safe": "安全可靠的处理",
+        "quick": "快速转换",
+        "download": "下载结果为文件"
       },
       "encodeSuccess": "URL编码成功！",
       "decodeSuccess": "URL解码成功！",
@@ -94,18 +94,77 @@
     },
     "qrCode": {
       "name": "二维码生成器",
-      "description": "从文本或URL生成二维码"
+      "description": "从文本或URL生成二维码",
+      "placeholder": "输入文本或URL生成二维码...",
+      "settings": "设置",
+      "size": "尺寸",
+      "errorCorrection": "纠错级别",
+      "generate": "生成二维码",
+      "result": "生成的二维码",
+      "features": {
+        "title": "功能特点：",
+        "generate": "从文本/URL生成二维码",
+        "customSize": "可自定义二维码尺寸",
+        "errorCorrection": "多种纠错级别",
+        "download": "下载二维码图片",
+        "quick": "快速生成"
+      }
     },
     "colorPicker": {
       "name": "颜色选择器",
-      "description": "选择颜色并获取不同格式的颜色代码"
+      "description": "选择颜色并获取不同格式的颜色代码",
+      "inputColor": "输入颜色",
+      "preview": "颜色预览",
+      "presetColors": "预设颜色",
+      "colorFormats": "颜色格式",
+      "copyAllFormats": "复制所有格式",
+      "features": {
+        "title": "功能特点：",
+        "pickColor": "从调色板选择颜色",
+        "multipleFormats": "多种颜色格式（HEX、RGB、HSL）",
+        "presetColors": "预设颜色调色板",
+        "realTime": "实时颜色转换",
+        "copyAll": "一键复制所有格式"
+      }
     },
     "passwordGenerator": {
       "name": "密码生成器",
-      "description": "生成强大安全的密码"
+      "description": "生成强大安全的密码",
+      "settings": "设置",
+      "length": "长度",
+      "characterTypes": "字符类型",
+      "uppercase": "大写字母 (A-Z)",
+      "lowercase": "小写字母 (a-z)",
+      "numbers": "数字 (0-9)",
+      "symbols": "符号 (!{at}#$%^&*)",
+      "generatedPassword": "生成的密码",
+      "strength": "密码强度",
+      "customize": "自定义密码条件",
+      "clickGenerate": "点击生成创建密码",
+      "generate": "生成密码",
+      "batchGeneration": "批量生成",
+      "batchCount": "批量数量",
+      "generateBatch": "批量生成",
+      "checks": {
+        "length": "至少12个字符",
+        "uppercase": "包含大写字母",
+        "lowercase": "包含小写字母",
+        "numbers": "包含数字",
+        "symbols": "包含符号",
+        "noCommon": "不是常见密码"
+      },
+      "features": {
+        "title": "功能特点：",
+        "customize": "自定义密码条件",
+        "strength": "密码强度指示器",
+        "batch": "批量生成",
+        "secure": "安全随机生成",
+        "quick": "快速生成"
+      }
     }
   },
   "categories": {
+    "title": "分类",
     "text": "文本",
     "developer": "开发者",
     "utility": "实用工具",
@@ -123,7 +182,10 @@
     "swap": "交换",
     "backToTools": "← 返回工具列表",
     "length": "长度",
-    "characters": "个字符"
+    "characters": "个字符",
+    "tools": "工具",
+    "generating": "生成中...",
+    "cancel": "取消"
   },
   "footer": {
     "description": "为开发者和日常使用提供的免费在线工具。简单、快速、注重隐私。",
@@ -134,5 +196,43 @@
     "privacy": "隐私政策",
     "terms": "服务条款",
     "allRightsReserved": "版权所有。"
+  },
+  "pricing": {
+    "title": "选择适合您的计划",
+    "description": "选择适合您需求的定价方案。通过我们经济实惠的订阅计划解锁所有高级功能。",
+    "mostPopular": "最受欢迎",
+    "plans": {
+      "monthly": {
+        "name": "专业版 月付",
+        "price": "$9.99/月",
+        "features": ["无限制使用所有工具", "优先客服支持", "云端同步设置", "无广告体验"],
+        "button": "选择月付计划"
+      },
+      "yearly": {
+        "name": "专业版 年付",
+        "price": "$79.99/年",
+        "features": ["无限制使用所有工具", "优先客服支持", "云端同步设置", "无广告体验", "年付节省33%"],
+        "button": "选择年付计划"
+      },
+      "lifetime": {
+        "name": "专业版 终身",
+        "price": "$299.99/一次性",
+        "features": ["终身无限制使用", "所有未来功能更新", "优先客服支持", "云端同步设置", "永久去除广告"],
+        "button": "选择终身计划"
+      }
+    }
+  },
+  "payment": {
+    "selectPaymentMethod": "选择支付方式",
+    "product": "商品",
+    "amount": "金额",
+    "type": "类型",
+    "subscription": "订阅",
+    "recommended": "推荐",
+    "creemDescription": "快速、安全的支付方式，支持信用卡、借记卡等多种支付方式",
+    "paypalDescription": "全球领先的数字支付平台，安全可靠的支付保障",
+    "payWith": "使用",
+    "pay": "支付",
+    "securityText": "安全加密支付 | SSL证书保护 | 符合PCI DSS标准"
   }
 }

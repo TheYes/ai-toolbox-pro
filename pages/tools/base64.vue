@@ -1,111 +1,140 @@
 <template>
-  <div class="tool-container">
+  <div class="min-h-screen">
     <!-- 工具头部 -->
-    <div class="tool-header">
-      <NuxtLink :to="getLocalizedPath('/tools')" class="text-primary-600 hover:text-primary-700 mb-4 inline-block">
-        ← {{ t('common.backToTools') }}
-      </NuxtLink>
-      <h1 class="tool-title">{{ t('tools.base64.name') }}</h1>
-      <p class="tool-description">{{ t('tools.base64.description') }}</p>
-    </div>
-
-    <!-- 操作模式选择 -->
-    <div class="card mb-6">
-      <div class="flex flex-wrap gap-4 justify-center">
-        <button
-          @click="mode = 'encode'"
-          :class="mode === 'encode' ? 'btn-primary' : 'btn-secondary'"
+    <div class="bg-gradient-to-br from-primary-50 to-secondary-50 py-16">
+      <div class="container mx-auto px-6">
+        <NuxtLink
+          :to="getLocalizedPath('/tools')"
+          class="text-primary-600 hover:text-primary-700 mb-4 inline-block"
         >
-          {{ t('tools.base64.encode') }}
-        </button>
-        <button
-          @click="mode = 'decode'"
-          :class="mode === 'decode' ? 'btn-primary' : 'btn-secondary'"
-        >
-          {{ t('tools.base64.decode') }}
-        </button>
+          ← {{ t('common.backToTools') }}
+        </NuxtLink>
+        <h1 class="text-4xl font-bold text-gray-900 mb-4 text-center">{{ t('tools.base64.name') }}</h1>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto text-center">{{ t('tools.base64.description') }}</p>
       </div>
     </div>
 
-    <div class="tool-content">
-      <!-- 输入区域 -->
-      <div class="card">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-semibold">{{ t('common.input') }}</h2>
-          <div class="space-x-2">
-            <button @click="clearInput" class="btn-secondary text-sm px-3 py-1">
-              {{ t('common.clear') }}
-            </button>
-            <button @click="loadExample" class="btn-secondary text-sm px-3 py-1">
-              {{ t('common.example') }}
-            </button>
+    <!-- 工具内容 -->
+    <div class="container mx-auto px-6 py-16">
+      <!-- 操作模式选择 -->
+      <div class="card mb-6">
+        <div class="flex flex-wrap gap-4 justify-center">
+          <button
+            @click="mode = 'encode'"
+            :class="mode === 'encode' ? 'btn-primary' : 'btn-secondary'"
+          >
+            {{ t('tools.base64.encode') }}
+          </button>
+          <button
+            @click="mode = 'decode'"
+            :class="mode === 'decode' ? 'btn-primary' : 'btn-secondary'"
+          >
+            {{ t('tools.base64.decode') }}
+          </button>
+        </div>
+      </div>
+
+      <div class="tool-content">
+        <!-- 输入区域 -->
+        <div class="card">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold">{{ t('common.input') }}</h2>
+            <div class="space-x-2">
+              <button
+                @click="clearInput"
+                class="btn-secondary text-sm px-3 py-1"
+              >
+                {{ t('common.clear') }}
+              </button>
+              <button
+                @click="loadExample"
+                class="btn-secondary text-sm px-3 py-1"
+              >
+                {{ t('common.example') }}
+              </button>
+            </div>
           </div>
+          <textarea
+            v-model="inputText"
+            :placeholder="mode === 'encode' ? 'Enter text to encode...' : 'Enter Base64 to decode...'"
+            class="input-field min-h-[200px]"
+            @input="processText"
+          ></textarea>
+          <div class="mt-2 text-sm text-gray-600">{{ t('common.length') }}: {{ inputText.length }} {{ t('common.characters') }}</div>
         </div>
-        <textarea
-          v-model="inputText"
-          :placeholder="mode === 'encode' ? 'Enter text to encode...' : 'Enter Base64 to decode...'"
-          class="input-field min-h-[200px]"
-          @input="processText"
-        ></textarea>
-        <div class="mt-2 text-sm text-gray-600">
-          {{ t('common.length') }}: {{ inputText.length }} {{ t('common.characters') }}
+
+        <!-- 操作按钮 -->
+        <div class="flex flex-wrap gap-4 justify-center">
+          <button
+            @click="processText"
+            class="btn-primary"
+          >
+            {{ mode === 'encode' ? $t('tools.base64.encode') : $t('tools.base64.decode') }}
+          </button>
+          <button
+            @click="swapInputOutput"
+            class="btn-secondary"
+          >
+            {{ t('common.swap') }}
+          </button>
+          <button
+            @click="copyResult"
+            class="btn-secondary"
+          >
+            {{ t('common.copy') }}
+          </button>
         </div>
-      </div>
 
-      <!-- 操作按钮 -->
-      <div class="flex flex-wrap gap-4 justify-center">
-        <button @click="processText" class="btn-primary">
-          {{ mode === 'encode' ? $t('tools.base64.encode') : $t('tools.base64.decode') }}
-        </button>
-        <button @click="swapInputOutput" class="btn-secondary">
-          {{ t('common.swap') }}
-        </button>
-        <button @click="copyResult" class="btn-secondary">
-          {{ t('common.copy') }}
-        </button>
-      </div>
-
-      <!-- 输出区域 -->
-      <div class="card">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-semibold">{{ t('common.output') }}</h2>
-          <div class="space-x-2">
-            <button @click="copyResult" class="btn-secondary text-sm px-3 py-1">
-              {{ t('common.copy') }}
-            </button>
-            <button @click="downloadResult" class="btn-secondary text-sm px-3 py-1">
-              {{ t('common.download') }}
-            </button>
+        <!-- 输出区域 -->
+        <div class="card">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold">{{ t('common.output') }}</h2>
+            <div class="space-x-2">
+              <button
+                @click="copyResult"
+                class="btn-secondary text-sm px-3 py-1"
+              >
+                {{ t('common.copy') }}
+              </button>
+              <button
+                @click="downloadResult"
+                class="btn-secondary text-sm px-3 py-1"
+              >
+                {{ t('common.download') }}
+              </button>
+            </div>
           </div>
+          <textarea
+            v-model="outputText"
+            readonly
+            class="input-field min-h-[200px] bg-gray-50"
+            :class="{ 'border-red-300': error, 'border-green-300': !error && outputText }"
+          ></textarea>
+          <div class="mt-2 text-sm text-gray-600">{{ t('common.length') }}: {{ outputText.length }} {{ t('common.characters') }}</div>
         </div>
-        <textarea
-          v-model="outputText"
-          readonly
-          class="input-field min-h-[200px] bg-gray-50"
-          :class="{ 'border-red-300': error, 'border-green-300': !error && outputText }"
-        ></textarea>
-        <div class="mt-2 text-sm text-gray-600">
-          {{ t('common.length') }}: {{ outputText.length }} {{ t('common.characters') }}
+
+        <!-- 状态信息 -->
+        <div
+          v-if="statusMessage"
+          class="text-center p-4 rounded-md"
+          :class="statusClass"
+        >
+          {{ statusMessage }}
         </div>
-      </div>
 
-      <!-- 状态信息 -->
-      <div v-if="statusMessage" class="text-center p-4 rounded-md" :class="statusClass">
-        {{ statusMessage }}
-      </div>
-
-      <!-- 工具信息 -->
-      <div class="card bg-blue-50 border-blue-200">
-        <h3 class="text-lg font-semibold mb-3 text-blue-900">
-          {{ t('tools.base64.features.title') }}
-        </h3>
-        <ul class="space-y-2 text-blue-800">
-          <li>✅ {{ t('tools.base64.features.encode') }}</li>
-          <li>✅ {{ t('tools.base64.features.decode') }}</li>
-          <li>✅ {{ t('tools.base64.features.safe') }}</li>
-          <li>✅ {{ t('tools.base64.features.quick') }}</li>
-          <li>✅ {{ t('tools.base64.features.download') }}</li>
-        </ul>
+        <!-- 工具信息 -->
+        <div class="card bg-blue-50 border-blue-200">
+          <h3 class="text-lg font-semibold mb-3 text-blue-900">
+            {{ t('tools.base64.features.title') }}
+          </h3>
+          <ul class="space-y-2 text-blue-800">
+            <li>✅ {{ t('tools.base64.features.encode') }}</li>
+            <li>✅ {{ t('tools.base64.features.decode') }}</li>
+            <li>✅ {{ t('tools.base64.features.safe') }}</li>
+            <li>✅ {{ t('tools.base64.features.quick') }}</li>
+            <li>✅ {{ t('tools.base64.features.download') }}</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -119,9 +148,7 @@ const { t } = useI18n()
 // SEO设置
 useHead({
   title: 'Base64 Encoder/Decoder',
-  meta: [
-    { name: 'description', content: 'Free online Base64 encoder and decoder tool for text and data' }
-  ]
+  meta: [{ name: 'description', content: 'Free online Base64 encoder and decoder tool for text and data' }]
 })
 
 // 工具函数
@@ -230,7 +257,7 @@ const showStatus = (message, type) => {
 }
 
 // 监听模式变化
-watch(mode, () => {
+watch(() => mode.value, () => {
   clearOutput()
   if (inputText.value) {
     processText()
@@ -239,24 +266,6 @@ watch(mode, () => {
 </script>
 
 <style scoped>
-.tool-container {
-  max-width: 4xl;
-  margin: 0 auto;
-  padding: 1rem;
-}
-
-.tool-header {
-  margin-bottom: 2rem;
-}
-
-.tool-title {
-  @apply text-3xl font-bold text-gray-900 mb-2;
-}
-
-.tool-description {
-  @apply text-gray-600;
-}
-
 .tool-content {
   @apply space-y-6;
 }

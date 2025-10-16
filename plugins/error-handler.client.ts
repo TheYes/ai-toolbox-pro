@@ -1,4 +1,4 @@
-export default defineNuxtPlugin(() => {
+export default defineNuxtPlugin((nuxtApp) => {
   // 全局错误处理
   const handleError = (error, instance, info) => {
     console.error('Global error:', error)
@@ -18,11 +18,11 @@ export default defineNuxtPlugin(() => {
     }
   }
 
-  // Vue 错误处理器
-  onErrorCaptured((error, instance, info) => {
+  // 使用 Vue 应用的全局错误处理器替代 onErrorCaptured
+  nuxtApp.vueApp.config.errorHandler = (error, instance, info) => {
     handleError(error, instance, info)
     return false // 阻止错误继续传播
-  })
+  }
 
   // 未处理的 Promise 错误
   if (import.meta.client) {
