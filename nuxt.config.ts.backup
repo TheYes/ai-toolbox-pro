@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
 
   // 模块配置
-  modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/i18n', '@pinia/nuxt', 'nuxt-creem'],
 
   // 启用服务端渲染，但优化配置
   ssr: true,
